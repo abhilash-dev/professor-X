@@ -2,29 +2,35 @@ package ai.profX.model;
 
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Id;
+
+import ai.profX.model.repo.CharacterRepo;
 
 public class Character {
 	@Id
-	private int charId;
+	private long charId;
 	private String name;
 	private Date createdDateTime;
 	private int noOfTimesPlayed;
 	private Date lastPlayedDateTime;
+	
+	@Autowired
+	private CharacterRepo characterRepo;
 	
 	public Character(String name) {
 		this.name = name.toLowerCase();
 		this.createdDateTime = new Date();
 		this.noOfTimesPlayed = 1;
 		this.lastPlayedDateTime = new Date();
-		this.charId = 1; //TODO fetch the count from the DB and make this count()+1
+		this.charId = characterRepo.count()+1;
 	}
 
-	public int getCharId() {
+	public long getCharId() {
 		return charId;
 	}
 
-	public void setCharId(int charId) {
+	public void setCharId(long charId) {
 		this.charId = charId;
 	}
 

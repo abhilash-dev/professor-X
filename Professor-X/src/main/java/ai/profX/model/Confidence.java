@@ -6,7 +6,7 @@ import org.springframework.data.annotation.Id;
 public class Confidence {
 	@Id
 	private ObjectId id;
-	private int characterId;
-	private int questionId;
+	private long characterId;
+	private long questionId;
 	private int value;
 }

@@ -6,21 +6,21 @@ import org.springframework.data.annotation.Id;
 
 public class GameLog {
 	@Id
-	private int characterId;
+	private long characterId;
 	private HashMap<Integer,Integer> log;
-	private int result;
+	private Boolean result;
 	
-	public GameLog(int characterId, HashMap<Integer, Integer> log, int result) {
+	public GameLog(long characterId, HashMap<Integer, Integer> log, Boolean result) {
 		this.characterId = characterId;
 		this.log = log;
 		this.result = result;
 	}
 
-	public int getCharacterId() {
+	public long getCharacterId() {
 		return characterId;
 	}
 
-	public void setCharacterId(int characterId) {
+	public void setCharacterId(long characterId) {
 		this.characterId = characterId;
 	}
 
@@ -32,11 +32,11 @@ public class GameLog {
 		this.log = log;
 	}
 
-	public int getResult() {
+	public Boolean getResult() {
 		return result;
 	}
 
-	public void setResult(int result) {
+	public void setResult(Boolean result) {
 		this.result = result;
 	}
 	
