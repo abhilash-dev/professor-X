@@ -9,4 +9,39 @@ public class Confidence {
 	private long characterId;
 	private long questionId;
 	private int value;
+	
+	public Confidence(long characterId, long questionId, int value) {
+		this.characterId = characterId;
+		this.questionId = questionId;
+		this.value = value;
+	}
+
+	public Confidence(long characterId, long questionId) {
+		this.characterId = characterId;
+		this.questionId = questionId;
+	}
+
+	public long getCharacterId() {
+		return characterId;
+	}
+
+	public void setCharacterId(long characterId) {
+		this.characterId = characterId;
+	}
+
+	public long getQuestionId() {
+		return questionId;
+	}
+
+	public void setQuestionId(long questionId) {
+		this.questionId = questionId;
+	}
+
+	public int getValue() {
+		return value;
+	}
+
+	public void setValue(int value) {
+		this.value = value;
+	}
 }
