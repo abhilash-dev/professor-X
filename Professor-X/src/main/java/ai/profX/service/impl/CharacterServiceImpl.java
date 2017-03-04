@@ -26,7 +26,12 @@ public class CharacterServiceImpl implements CharacterService {
 	public long addNewCharacter(String name) {
 		Character character = new Character(name);
 		long charId = character.getCharId();
-		//TODO to implement further operations once a new character is created
+		
+		 /* TODO to implement further operations once a new character is created
+		 * 1. add the object to the db and get its id
+		 * 2. Get all questions
+		 * 3. update confidence for all questions with respective question id's and this new charId i.e., call initConfidence
+		 */
 		return charId;
 	}
 
@@ -77,19 +82,12 @@ public class CharacterServiceImpl implements CharacterService {
 	public int getNoOfCharactersWithPositiveConfidenceForQuestionId(List<Character> characters, long questionId) {
 		int count = 0;
 		Iterator<Character> it = characters.iterator();
-		List<Confidence> confidenceList = new ArrayList<>();
+		Confidence confidence;
 		
 		while(it.hasNext()){
-			confidenceList = confidenceRepo.findByCharacterIdAndQuestionId(it.next().getCharId(), questionId);
-		}
-		
-		if(confidenceList.size() > 0){
-			Iterator<Confidence> confIt = confidenceList.iterator();
-			int value = 0;
-			while(confIt.hasNext()){
-				value = confIt.next().getValue();
-				if(value > 0)
-					count++;
+			confidence = confidenceRepo.findByCharacterIdAndQuestionId(it.next().getCharId(), questionId);
+			if(confidence.getValue() > 0){
+				count++;
 			}
 		}
 		return count;
@@ -99,19 +97,12 @@ public class CharacterServiceImpl implements CharacterService {
 	public int getNoOfCharactersWithNegativeConfidenceForQuestionId(List<Character> characters, long questionId) {
 		int count = 0;
 		Iterator<Character> it = characters.iterator();
-		List<Confidence> confidenceList = new ArrayList<>();
+		Confidence confidence;
 		
 		while(it.hasNext()){
-			confidenceList = confidenceRepo.findByCharacterIdAndQuestionId(it.next().getCharId(), questionId);
-		}
-		
-		if(confidenceList.size() > 0){
-			Iterator<Confidence> confIt = confidenceList.iterator();
-			int value = 0;
-			while(confIt.hasNext()){
-				value = confIt.next().getValue();
-				if(value < 0)
-					count++;
+			confidence = confidenceRepo.findByCharacterIdAndQuestionId(it.next().getCharId(), questionId);
+			if(confidence.getValue() < 0){
+				count++;
 			}
 		}
 		return count;
@@ -122,6 +113,11 @@ public class CharacterServiceImpl implements CharacterService {
 		Character character = characterRepo.findByCharId(charId);
 		if(character!=null)
 			characterRepo.delete(character);
+		/*
+		 * TODO: to implement further functionality
+		 * 1. delete the repective character if it exists
+		 * 2. delete all its confidence associations as well
+		 */
 	}
 
 	@Override

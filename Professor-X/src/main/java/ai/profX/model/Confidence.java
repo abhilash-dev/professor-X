@@ -19,6 +19,7 @@ public class Confidence {
 	public Confidence(long characterId, long questionId) {
 		this.characterId = characterId;
 		this.questionId = questionId;
+		this.value = 0;
 	}
 
 	public long getCharacterId() {
