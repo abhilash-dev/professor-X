@@ -9,29 +9,40 @@ import org.springframework.stereotype.Service;
 
 import ai.profX.model.Character;
 import ai.profX.model.Confidence;
+import ai.profX.model.Question;
 import ai.profX.model.repo.CharacterRepo;
 import ai.profX.model.repo.ConfidenceRepo;
 import ai.profX.service.CharacterService;
+import ai.profX.service.ConfidenceService;
+import ai.profX.service.QuestionService;
 
 @Service
 public class CharacterServiceImpl implements CharacterService {
-	
+
 	@Autowired
 	private CharacterRepo characterRepo;
-	
+
 	@Autowired
 	private ConfidenceRepo confidenceRepo;
+
+	@Autowired
+	private QuestionService questionService;
+
+	@Autowired
+	private ConfidenceService confidenceService;
 
 	@Override
 	public long addNewCharacter(String name) {
 		Character character = new Character(name);
+		characterRepo.save(character);
+
 		long charId = character.getCharId();
-		
-		 /* TODO to implement further operations once a new character is created
-		 * 1. add the object to the db and get its id
-		 * 2. Get all questions
-		 * 3. update confidence for all questions with respective question id's and this new charId i.e., call initConfidence
-		 */
+		List<Question> questionList = questionService.getAllQuestions();
+		Iterator<Question> questionIterator = questionList.iterator();
+
+		while (questionIterator.hasNext()) {
+			confidenceService.initConfidence(charId, questionIterator.next().getQuestionId());
+		}
 		return charId;
 	}
 
@@ -39,7 +50,7 @@ public class CharacterServiceImpl implements CharacterService {
 	public List<Character> getAllCharacters() {
 		List<Character> charList = new ArrayList<>();
 		charList = characterRepo.findAll();
-		if(charList.size() > 0)
+		if (charList.size() > 0)
 			return charList;
 		else
 			return null;
@@ -48,7 +59,7 @@ public class CharacterServiceImpl implements CharacterService {
 	@Override
 	public Character getCharacterByName(String name) {
 		Character character = characterRepo.findByName(name);
-		if(character!=null)
+		if (character != null)
 			return character;
 		else
 			return null;
@@ -57,7 +68,7 @@ public class CharacterServiceImpl implements CharacterService {
 	@Override
 	public Character getCharacterById(long charId) {
 		Character character = characterRepo.findByCharId(charId);
-		if(character!=null)
+		if (character != null)
 			return character;
 		else
 			return null;
@@ -67,12 +78,13 @@ public class CharacterServiceImpl implements CharacterService {
 	public int getNoOfUnknownCharactersForQuestionId(List<Character> characters, long questionId) {
 		int value = 0;
 		int count = 0;
-		
+
 		Iterator<Character> it = characters.iterator();
 		Confidence confidence = null;
-		while(it.hasNext()){
-			confidence = confidenceRepo.findByCharacterIdAndQuestionIdAndValue(it.next().getCharId(), questionId, value);
-			if(confidence != null)
+		while (it.hasNext()) {
+			confidence = confidenceRepo.findByCharacterIdAndQuestionIdAndValue(it.next().getCharId(), questionId,
+					value);
+			if (confidence != null)
 				count++;
 		}
 		return count;
@@ -83,10 +95,10 @@ public class CharacterServiceImpl implements CharacterService {
 		int count = 0;
 		Iterator<Character> it = characters.iterator();
 		Confidence confidence;
-		
-		while(it.hasNext()){
+
+		while (it.hasNext()) {
 			confidence = confidenceRepo.findByCharacterIdAndQuestionId(it.next().getCharId(), questionId);
-			if(confidence.getValue() > 0){
+			if (confidence.getValue() > 0) {
 				count++;
 			}
 		}
@@ -98,10 +110,10 @@ public class CharacterServiceImpl implements CharacterService {
 		int count = 0;
 		Iterator<Character> it = characters.iterator();
 		Confidence confidence;
-		
-		while(it.hasNext()){
+
+		while (it.hasNext()) {
 			confidence = confidenceRepo.findByCharacterIdAndQuestionId(it.next().getCharId(), questionId);
-			if(confidence.getValue() < 0){
+			if (confidence.getValue() < 0) {
 				count++;
 			}
 		}
@@ -111,19 +123,23 @@ public class CharacterServiceImpl implements CharacterService {
 	@Override
 	public void removeCharacter(long charId) {
 		Character character = characterRepo.findByCharId(charId);
-		if(character!=null)
+		if (character != null) {
 			characterRepo.delete(character);
-		/*
-		 * TODO: to implement further functionality
-		 * 1. delete the repective character if it exists
-		 * 2. delete all its confidence associations as well
-		 */
+
+			List<Question> questionList = questionService.getAllQuestions();
+			Iterator<Question> questionIterator = questionList.iterator();
+
+			while (questionIterator.hasNext()) {
+				confidenceRepo.delete(
+						confidenceRepo.findByCharacterIdAndQuestionId(charId, questionIterator.next().getQuestionId()));
+			}
+		}
 	}
 
 	@Override
 	public void updateNoOfTimesPlayed(long charId) {
 		Character character = characterRepo.findByCharId(charId);
-		if(character!=null){
+		if (character != null) {
 			character.setNoOfTimesPlayed(character.getNoOfTimesPlayed() + 1);
 		}
 	}

@@ -132,10 +132,7 @@ public class ConfidenceServiceImpl implements ConfidenceService {
 					table.put(charId, questionId, confidence.getValue());
 			}
 		}
-		
-		if(table.size() > 0)
-			return table;
-		else
-			return null;
+
+		return table;
 	}
 }

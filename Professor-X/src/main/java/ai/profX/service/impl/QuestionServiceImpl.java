@@ -1,22 +1,36 @@
 package ai.profX.service.impl;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import ai.profX.model.Character;
 import ai.profX.model.Question;
+import ai.profX.model.repo.ConfidenceRepo;
 import ai.profX.model.repo.QuestionRepo;
+import ai.profX.service.CharacterService;
+import ai.profX.service.ConfidenceService;
 import ai.profX.service.QuestionService;
 
 public class QuestionServiceImpl implements QuestionService {
-	
+
 	@Autowired
 	private QuestionRepo questionRepo;
+
+	@Autowired
+	private CharacterService characterService;
+
+	@Autowired
+	private ConfidenceService confidenceService;
+
+	@Autowired
+	private ConfidenceRepo confidenceRepo;
 
 	@Override
 	public List<Question> getAllQuestions() {
 		List<Question> questionList = questionRepo.findAll();
-		if(questionList.size() > 0)
+		if (questionList.size() > 0)
 			return questionList;
 		else
 			return null;
@@ -25,7 +39,7 @@ public class QuestionServiceImpl implements QuestionService {
 	@Override
 	public Question getQuestionById(long questionId) {
 		Question question = questionRepo.findByQuestionId(questionId);
-		if(question!=null)
+		if (question != null)
 			return question;
 		else
 			return null;
@@ -34,7 +48,7 @@ public class QuestionServiceImpl implements QuestionService {
 	@Override
 	public Question getQuestionByText(String text) {
 		Question question = questionRepo.findByText(text);
-		if(question!=null)
+		if (question != null)
 			return question;
 		else
 			return null;
@@ -43,25 +57,37 @@ public class QuestionServiceImpl implements QuestionService {
 	@Override
 	public void removeQuestion(long questionId) {
 		Question question = questionRepo.findByQuestionId(questionId);
-		if(question!=null)
+		if (question != null) {
 			questionRepo.delete(question);
-		/*
-		 * to implement further functionality
-		 * 1. fetch all characters
-		 * 2. remove associated confidence from all characters for this question
-		 */
+
+			List<Character> characterList = characterService.getAllCharacters();
+			Iterator<Character> characterIterator = characterList.iterator();
+
+			while (characterIterator.hasNext()) {
+				confidenceRepo.delete(confidenceRepo
+						.findByCharacterIdAndQuestionId(characterIterator.next().getCharId(), questionId));
+			}
+		}
 	}
 
 	@Override
 	public long addQuestion(String text) {
 		Question question = new Question(text);
 		questionRepo.save(question);
-		/*
-		 * to implement further functionality
-		 * 1. fetch all characters
-		 * 2. update or init confidence for this new question with all characters
-		 */
-		return question.getQuestionId();
+
+		long questionId = question.getQuestionId();
+		List<Character> characterList = characterService.getAllCharacters();
+		Iterator<Character> characterIterator = characterList.iterator();
+
+		while (characterIterator.hasNext()) {
+			confidenceService.initConfidence(characterIterator.next().getCharId(), questionId);
+		}
+		return questionId;
+	}
+
+	@Override
+	public long size() {
+		return questionRepo.count();
 	}
 
 }

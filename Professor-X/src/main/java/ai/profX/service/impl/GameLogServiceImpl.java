@@ -9,7 +9,7 @@ import ai.profX.model.repo.GameLogRepo;
 import ai.profX.service.GameLogService;
 
 public class GameLogServiceImpl implements GameLogService {
-	
+
 	@Autowired
 	private GameLogRepo gameLogRepo;
 
