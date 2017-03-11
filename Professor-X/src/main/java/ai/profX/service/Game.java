@@ -1,5 +1,6 @@
 package ai.profX.service;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -13,9 +14,9 @@ public interface Game {
 	public List<Character> getNearByCharacters(LinkedHashMap<Long, Integer> characterValues,int count);
 	public LinkedHashMap<Long, Integer> getNearbyCharacterValues(LinkedHashMap<Long, Integer> characterValues,int count);
 	public Double getId3Entropy(List<Character> characterList,Question question);
-	public String chooseQuestion(List<Question> initialQuestions, LinkedHashMap<Long, Integer> characterValues, List<Question> askedQuestions, int count);
-	public void updateLocalKnowledge(LinkedHashMap<Long, Integer> characterValues, List<Question> askedQuestions, long questionId, int answer);
+	public Question chooseQuestion(List<Question> initialQuestions, LinkedHashMap<Long, Integer> characterValues, HashMap<Long, Integer> askedQuestions, int count);
+	public void updateLocalKnowledge(LinkedHashMap<Long, Integer> characterValues, HashMap<Long, Integer> askedQuestions, long questionId, int answer);
 	public Character guess(LinkedHashMap<Long, Integer> characterValues);
-	public long learnNewCharacter(List<Question> askedQuestions, String text);
-	public void learn(List<Question> askedQuestions, long charId);
+	public long learnCharacter(HashMap<Long, Integer> askedQuestions, String text);
+	public void learn(HashMap<Long, Integer> askedQuestions, long charId);
 }

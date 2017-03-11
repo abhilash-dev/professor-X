@@ -7,10 +7,10 @@ import org.springframework.data.annotation.Id;
 public class GameLog {
 	@Id
 	private long characterId;
-	private HashMap<Integer,Integer> log;
+	private HashMap<Long,Integer> log;
 	private Boolean result;
 	
-	public GameLog(long characterId, HashMap<Integer, Integer> log, Boolean result) {
+	public GameLog(long characterId, HashMap<Long, Integer> log, Boolean result) {
 		this.characterId = characterId;
 		this.log = log;
 		this.result = result;
@@ -24,11 +24,11 @@ public class GameLog {
 		this.characterId = characterId;
 	}
 
-	public HashMap<Integer, Integer> getLog() {
+	public HashMap<Long, Integer> getLog() {
 		return log;
 	}
 
-	public void setLog(HashMap<Integer, Integer> log) {
+	public void setLog(HashMap<Long, Integer> log) {
 		this.log = log;
 	}
 
@@ -39,6 +39,4 @@ public class GameLog {
 	public void setResult(Boolean result) {
 		this.result = result;
 	}
-	
-	
 }

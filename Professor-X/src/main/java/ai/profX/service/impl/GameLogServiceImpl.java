@@ -14,7 +14,7 @@ public class GameLogServiceImpl implements GameLogService {
 	private GameLogRepo gameLogRepo;
 
 	@Override
-	public void addGameLog(long charId, HashMap<Integer, Integer> log, Boolean result) {
+	public void addGameLog(long charId, HashMap<Long, Integer> log, Boolean result) {
 		GameLog gameLog = new GameLog(charId, log, result);
 		gameLogRepo.save(gameLog);
 	}
