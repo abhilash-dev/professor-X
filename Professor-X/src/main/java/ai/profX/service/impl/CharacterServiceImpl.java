@@ -31,17 +31,23 @@ public class CharacterServiceImpl implements CharacterService {
 	@Autowired
 	private ConfidenceService confidenceService;
 
+	@Autowired
+	private NextSequenceServiceImpl nextSequenceService;
+	
 	@Override
 	public long addNewCharacter(String name) {
 		Character character = new Character(name);
-		characterRepo.save(character);
+		character.setCharId(nextSequenceService.getNextSequence("character"));
+		characterRepo.insert(character);
 
 		long charId = character.getCharId();
 		List<Question> questionList = questionService.getAllQuestions();
-		Iterator<Question> questionIterator = questionList.iterator();
+		if(questionList!=null){
+			Iterator<Question> questionIterator = questionList.iterator();
 
-		while (questionIterator.hasNext()) {
-			confidenceService.initConfidence(charId, questionIterator.next().getQuestionId());
+			while (questionIterator.hasNext()) {
+				confidenceService.initConfidence(charId, questionIterator.next().getQuestionId());
+			}
 		}
 		return charId;
 	}
@@ -58,7 +64,7 @@ public class CharacterServiceImpl implements CharacterService {
 
 	@Override
 	public Character getCharacterByName(String name) {
-		Character character = characterRepo.findByName(name);
+		Character character = characterRepo.findByName(name.trim().toLowerCase());
 		if (character != null)
 			return character;
 		else
@@ -148,5 +154,4 @@ public class CharacterServiceImpl implements CharacterService {
 	public long getTotalCharacterCount() {
 		return characterRepo.count();
 	}
-
 }

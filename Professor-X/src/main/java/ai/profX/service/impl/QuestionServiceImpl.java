@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import ai.profX.model.Character;
 import ai.profX.model.Question;
@@ -11,8 +12,10 @@ import ai.profX.model.repo.ConfidenceRepo;
 import ai.profX.model.repo.QuestionRepo;
 import ai.profX.service.CharacterService;
 import ai.profX.service.ConfidenceService;
+import ai.profX.service.NextSequenceService;
 import ai.profX.service.QuestionService;
 
+@Service
 public class QuestionServiceImpl implements QuestionService {
 
 	@Autowired
@@ -26,6 +29,9 @@ public class QuestionServiceImpl implements QuestionService {
 
 	@Autowired
 	private ConfidenceRepo confidenceRepo;
+	
+	@Autowired
+	private NextSequenceService nextSequenceService;
 
 	@Override
 	public List<Question> getAllQuestions() {
@@ -73,7 +79,8 @@ public class QuestionServiceImpl implements QuestionService {
 	@Override
 	public long addQuestion(String text) {
 		Question question = new Question(text);
-		questionRepo.save(question);
+		question.setQuestionId(nextSequenceService.getNextSequence("question"));
+		questionRepo.insert(question);
 
 		long questionId = question.getQuestionId();
 		List<Character> characterList = characterService.getAllCharacters();
@@ -86,7 +93,7 @@ public class QuestionServiceImpl implements QuestionService {
 	}
 
 	@Override
-	public long size() {
+	public long getTotalQuestionCount() {
 		return questionRepo.count();
 	}
 

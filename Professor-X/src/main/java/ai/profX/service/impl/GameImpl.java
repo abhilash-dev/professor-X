@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.google.common.math.DoubleMath;
 
@@ -21,6 +22,7 @@ import ai.profX.service.GameLogService;
 import ai.profX.service.QuestionService;
 import ai.profX.util.Util;
 
+@Service
 public class GameImpl implements Game {
 
 	@Autowired
@@ -51,7 +53,7 @@ public class GameImpl implements Game {
 		Question question = null;
 		int count = 0;
 		while (count != 2) {
-			potentialQuestionId = random.nextInt((int) questionService.size()) + 1;
+			potentialQuestionId = random.nextInt((int) questionService.getTotalQuestionCount()) + 1;
 			if (potentialQuestionId > 2) {
 				question = questionService.getQuestionById(potentialQuestionId);
 				if (question != null) {

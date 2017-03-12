@@ -7,23 +7,24 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import ai.profX.config.AppConfig;
-import ai.profX.model.Character;
-import ai.profX.service.CharacterService;
+import ai.profX.model.Question;
+import ai.profX.service.QuestionService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {AppConfig.class})
-public class TestCharacterService {
+public class TestQuestionService {
 	
 	@Autowired
-	private CharacterService characterService;
+	private QuestionService questionService;
 	
 	@Test
 	public void test(){
-		System.out.println(characterService.getTotalCharacterCount());
-
-		characterService.addNewCharacter("dummy");
-		Character character = characterService.getCharacterByName("dummy");
-		if(character!=null)
-			System.out.println(character.getCharId());
+		System.out.println(questionService.getTotalQuestionCount());
+		
+		questionService.addQuestion("Is your character alive?");
+		
+		Question question = questionService.getQuestionByText("is your character alive?");
+		if(question!=null)
+			System.out.println(question.getQuestionId());
 	}
 }

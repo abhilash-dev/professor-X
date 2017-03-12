@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
@@ -18,6 +19,7 @@ import ai.profX.service.CharacterService;
 import ai.profX.service.ConfidenceService;
 import ai.profX.service.QuestionService;
 
+@Service
 public class ConfidenceServiceImpl implements ConfidenceService {
 
 	@Autowired

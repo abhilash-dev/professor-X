@@ -10,5 +10,5 @@ public interface QuestionService {
 	public Question getQuestionById(long questionId);
 	public Question getQuestionByText(String text);
 	public void removeQuestion(long questionId);
-	public long size();
+	public long getTotalQuestionCount();
 }
