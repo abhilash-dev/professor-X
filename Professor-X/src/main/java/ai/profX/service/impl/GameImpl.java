@@ -37,16 +37,10 @@ public class GameImpl implements Game {
 	@Autowired
 	private GameLogService gameLogService;
 
-	private static List<Question> initialQuestions = new ArrayList<>();
-	private static final int POS_WEIGHT_CUTOFF = 10;
-	private static final int NEG_WEIGHT_CUTOFF = -10;
-	private static final int YES = 1;
-	private static final int NO = -1;
-	private static final int DONT_KNOW = 0;
-	
 	@Override
-	public List<Question> getInitialQuestions() {
-		initialQuestions.add(questionService.getQuestionById(1));
+	public List<Question> getInitialQuestions(List<Question> initialQuestions) {
+		Question question1 = questionService.getQuestionById(1);
+		initialQuestions.add(question1);
 
 		Random random = new Random(System.nanoTime());
 		long potentialQuestionId;
@@ -68,9 +62,8 @@ public class GameImpl implements Game {
 	}
 
 	@Override
-	public LinkedHashMap<Long, Integer> initCharacterValues() {
+	public LinkedHashMap<Long, Integer> initCharacterValues(LinkedHashMap<Long, Integer> characterValues) {
 		List<Character> characterList = characterService.getAllCharacters();
-		LinkedHashMap<Long, Integer> characterValues = new LinkedHashMap<>();
 
 		Iterator<Character> characterIterator = characterList.iterator();
 		while (characterIterator.hasNext()) {
@@ -167,7 +160,7 @@ public class GameImpl implements Game {
 		Question chosenQuestion = null;
 
 		if (initialQuestions.size() > 0) {
-			chosenQuestion = initialQuestions.get(initialQuestions.size());
+			chosenQuestion = initialQuestions.get(initialQuestions.size()-1);
 			initialQuestions.remove(chosenQuestion);
 		} else {
 			LinkedHashMap<Long, Integer> sortedCharacterValues = sortCharacterValues(characterValues);
@@ -181,7 +174,7 @@ public class GameImpl implements Game {
 			Question bestQuestion = null;
 			
 			for(Question question:allQuestionsList){
-				if(!isQuestionIdPresent(question.getQuestionId(),askedQuestions)){
+				if(!Util.isQuestionIdPresent(question.getQuestionId(),askedQuestions)){
 					double questionEntropy = getId3Entropy(characterList, question);
 					if(questionEntropy<=bestQuestionEntropy){
 						bestQuestionEntropy = questionEntropy;
@@ -195,15 +188,6 @@ public class GameImpl implements Game {
 		return chosenQuestion;
 	}
 	
-	private boolean isQuestionIdPresent(long questionId,HashMap<Long, Integer> askedQuestions) {
-		Iterator<Long> questionIdIterator = askedQuestions.keySet().iterator();
-		while(questionIdIterator.hasNext()){
-			if(questionIdIterator.next()==questionId)
-				return true;
-		}
-		return false;
-	}
-
 	public List<Character> getObjectsBasedOnCountInSortedOrder(LinkedHashMap<Long, Integer> sortedCharacterValues,int count){
 		List<Character> characterList = new ArrayList<>();
 		Iterator<Long> chracterIdIterator = sortedCharacterValues.keySet().iterator();
@@ -221,7 +205,7 @@ public class GameImpl implements Game {
 		// This method is the key to handle robustness of the system against intentional wrong answers, fine tune this method to
 		// play with the robustness of the system.
 		
-		if(!isAnswerValid(answer)){
+		if(!Util.isAnswerValid(answer)){
 			try {
 				throw new Exception("Answer should be either an YES, NO or DON'T KNOW!");
 			} catch (Exception e) {
@@ -235,17 +219,17 @@ public class GameImpl implements Game {
 			for(Confidence weight:weights){
 				key = weight.getCharacterId();
 				confidenceValue = weight.getValue();
-				if(isCharacterIdPresent(key,characterValues)){
-					if(confidenceValue > POS_WEIGHT_CUTOFF)
-						localValue = POS_WEIGHT_CUTOFF;
-					else if(confidenceValue < NEG_WEIGHT_CUTOFF)
-						localValue = NEG_WEIGHT_CUTOFF;
-					else if(confidenceValue < DONT_KNOW)
+				if(Util.isCharacterIdPresent(key,characterValues)){
+					if(confidenceValue > Constants.POS_WEIGHT_CUTOFF)
+						localValue = Constants.POS_WEIGHT_CUTOFF;
+					else if(confidenceValue < Constants.NEG_WEIGHT_CUTOFF)
+						localValue = Constants.NEG_WEIGHT_CUTOFF;
+					else if(confidenceValue < Constants.I_DONT_KNOW)
 						localValue = confidenceValue/2;
 					else
 						localValue = confidenceValue;
 					
-					if((answer == NO && localValue > 0) || (answer == YES && localValue < 0))
+					if((answer == Constants.NO && localValue > 0) || (answer == Constants.YES && localValue < 0))
 						localValue *= 5;
 					
 					
@@ -255,23 +239,6 @@ public class GameImpl implements Game {
 			askedQuestions.put(questionId, answer);
 		}
 
-	}
-
-	private boolean isAnswerValid(int answer) {
-		if(answer == YES || answer == NO || answer == DONT_KNOW){
-			return true;
-		}
-		return false;
-	}
-
-	private boolean isCharacterIdPresent(long characterId,LinkedHashMap<Long, Integer> characterValues) {
-		Iterator<Long> chracterIdIterator = characterValues.keySet().iterator();
-		
-		while(chracterIdIterator.hasNext()){
-			if(characterId == chracterIdIterator.next())
-				return true;
-		}
-		return false;
 	}
 
 	@Override

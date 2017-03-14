@@ -8,8 +8,8 @@ import ai.profX.model.Character;
 import ai.profX.model.Question;
 
 public interface Game {
-	public List<Question> getInitialQuestions();
-	public LinkedHashMap<Long, Integer> initCharacterValues();
+	public List<Question> getInitialQuestions(List<Question> initialQuestions);
+	public LinkedHashMap<Long, Integer> initCharacterValues(LinkedHashMap<Long, Integer> characterValues);
 	public LinkedHashMap<Long, Integer> sortCharacterValues(LinkedHashMap<Long, Integer> characterValues);
 	public List<Character> getNearByCharacters(LinkedHashMap<Long, Integer> characterValues,int count);
 	public LinkedHashMap<Long, Integer> getNearbyCharacterValues(LinkedHashMap<Long, Integer> characterValues,int count);
