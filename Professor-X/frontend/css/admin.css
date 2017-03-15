@@ -1,0 +1,14 @@
+.active {
+	color: red !important;
+}
+
+.btn-red{
+	background: rgb(226, 60, 57);
+	border: 2px solid rgb(226, 60, 57);
+	color: white !important;
+}
+
+.btn-red:hover{
+	background: rgb(226, 60, 57);
+	border: 2px solid rgb(226, 60, 57);
+}

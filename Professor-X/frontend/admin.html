@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Foundry Multi-purpose HTML Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link href="css/themify-icons.css" rel="stylesheet" type="text/css" media="all" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/dataTables.bootstrap.min.css" />    
+    <link href="css/theme.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="css/admin.css" rel="stylesheet" type="text/css" media="all" />
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400%7CRaleway:100,400,300,500,600,700%7COpen+Sans:400,500,600' rel='stylesheet' type='text/css'>
+
+
+    <body class="scroll-assist">
+        <div class="nav-container">
+            <a id="top"></a>
+            <nav class="bg-dark">
+                <div class="nav-bar">
+                    <div class="module left">
+                        <a href="index.html">
+                            <img class="logo logo-light" alt="Professor-X" src="img/logo-light.png" />
+                        </a>
+                    </div>
+                    <div class="module widget-handle mobile-toggle right visible-sm visible-xs">
+                        <i class="ti-menu"></i>
+                    </div>
+                    <div class="module-group right">
+                        <div class="module left">
+                            <ul class="menu">
+                                <li>
+                                    <a href="index.html">
+                                        Home
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="aboutus.html">
+                                        About Us
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!--end of menu module-->
+                    </div>
+                    <!--end of module group-->
+                </div>
+            </nav>
+        </div>
+        <div class="main-container">
+            <section class="page-title page-title-4 image-bg overlay parallax" style="height: 55px; background-color: #666">
+
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h3 class="uppercase mb0">Admin Panel</h3>
+                        </div>
+
+                        <!--end of row-->
+                    </div>
+                    <!--end of container-->
+                </section>
+                <section>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-12">
+
+
+                                <h5 class="uppercase">All Data</h5>
+                                <hr>
+                                <button class="btn btn-lg btn-red marg"  id="rowsel">Delete</button>
+                                <table id="example" class="table table-striped table-bordered" width="100%"></table>
+
+                            </div>
+                        </div>
+                        <!--end of row-->
+                    </div>
+                    <!--end of container-->
+                </section>
+
+            </div>
+            <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+            
+            <script src="js/scripts.js"></script>
+            <script src="js/custom/table.js"></script>
+            <script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+            <script src="https://cdn.datatables.net/1.10.13/js/dataTables.bootstrap.min.js"></script>
+        </body>
+        </html>
