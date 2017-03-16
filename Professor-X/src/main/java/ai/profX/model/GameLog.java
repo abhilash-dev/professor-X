@@ -10,6 +10,8 @@ public class GameLog {
 	private HashMap<Long,Integer> log;
 	private Boolean result;
 	
+	public GameLog(){}
+	
 	public GameLog(long characterId, HashMap<Long, Integer> log, Boolean result) {
 		this.characterId = characterId;
 		this.log = log;

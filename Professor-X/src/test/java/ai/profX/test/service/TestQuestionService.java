@@ -17,7 +17,7 @@ public class TestQuestionService {
 	@Autowired
 	private QuestionService questionService;
 	
-	
+	@Test
 	public void test(){
 		System.out.println(questionService.getTotalQuestionCount());
 		
@@ -28,7 +28,7 @@ public class TestQuestionService {
 			System.out.println(question.getQuestionId());
 	}
 	
-	@Test
+	
 	public void getQuestionById(){
 		System.out.println(questionService.getQuestionById(1).getText());
 	}

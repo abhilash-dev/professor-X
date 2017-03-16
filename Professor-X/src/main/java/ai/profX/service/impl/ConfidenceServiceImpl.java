@@ -76,8 +76,10 @@ public class ConfidenceServiceImpl implements ConfidenceService {
 
 		Iterator<Character> it = allCharacterList.iterator();
 		Confidence confidence;
+		long characterId;
 		while (it.hasNext()) {
-			confidence = confidenceRepo.findByCharacterIdAndQuestionId(it.next().getCharId(), questionId);
+			characterId = it.next().getCharId();
+			confidence = confidenceRepo.findByCharacterIdAndQuestionId(characterId, questionId);
 			if (confidence != null) {
 				confidenceObjectList.add(confidence);
 			}

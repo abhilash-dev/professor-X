@@ -10,6 +10,8 @@ public class Question {
 	private String text;
 	private Date createdDateTime;
 	
+	public Question(){}
+	
 	public Question(String text) {
 		this.text = text.trim().toLowerCase();
 		this.createdDateTime = new Date();

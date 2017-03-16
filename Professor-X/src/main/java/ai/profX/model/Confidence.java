@@ -10,6 +10,8 @@ public class Confidence {
 	private long questionId;
 	private int value;
 	
+	public Confidence(){}
+	
 	public Confidence(long characterId, long questionId, int value) {
 		this.characterId = characterId;
 		this.questionId = questionId;

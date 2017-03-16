@@ -149,8 +149,8 @@ public class WebController {
 	@RequestMapping(method = RequestMethod.POST, value = "/learn")
 	public @ResponseBody String postLearnInfo(HttpServletRequest request,
 			@RequestParam(value = "newCharacter", required = true)Boolean newCharacter,
-			@RequestParam(value = "newCharacter", required = true)String characterName,
-			@RequestParam(value = "userQuestion", required = false)String userQuestionText,
+			@RequestParam(value = "characterName", required = true)String characterName,
+			@RequestParam(value = "userQuestionText", required = false)String userQuestionText,
 			@RequestParam(value = "userQuestionAnswer", required = false)int userQuestionAnswer){
 		HttpSession session = request.getSession();
 		HashMap<Long, Integer> askedQuestions = (HashMap<Long, Integer>) session.getAttribute("askedQuestions");
@@ -187,17 +187,10 @@ public class WebController {
 		return null;
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, value = "/restart")
+	@RequestMapping(method = RequestMethod.GET, value = "/restart")
 	public @ResponseBody void restart(HttpServletRequest request){
 		resetGame(request);
 		//TODO reditect back to index
-	}
-	
-	@RequestMapping(method = RequestMethod.GET, value = "/admin")
-	public @ResponseBody String admin(HttpServletRequest request){
-		HttpSession session = request.getSession();
-		//TODO redirect to admin page
-		return null;
 	}
 	
 	public void resetGame(HttpServletRequest request){

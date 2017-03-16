@@ -84,10 +84,12 @@ public class QuestionServiceImpl implements QuestionService {
 
 		long questionId = question.getQuestionId();
 		List<Character> characterList = characterService.getAllCharacters();
-		Iterator<Character> characterIterator = characterList.iterator();
+		if(characterList!=null){
+			Iterator<Character> characterIterator = characterList.iterator();
 
-		while (characterIterator.hasNext()) {
+			while (characterIterator.hasNext()) {
 			confidenceService.initConfidence(characterIterator.next().getCharId(), questionId);
+			}
 		}
 		return questionId;
 	}

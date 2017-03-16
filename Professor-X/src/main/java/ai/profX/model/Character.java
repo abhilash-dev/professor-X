@@ -12,6 +12,8 @@ public class Character {
 	private int noOfTimesPlayed;
 	private Date lastPlayedDateTime;
 	
+	public Character(){}
+	
 	public Character(String name) {
 		this.name = name.trim().toLowerCase();
 		this.createdDateTime = new Date();
