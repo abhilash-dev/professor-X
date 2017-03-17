@@ -106,4 +106,7 @@
   background-color: white;
   width: 50%;
   float: right;
+  box-shadow: 0 0 6px #B2B2B2;
+  background-color: #F2F2F2;
+  padding-top: 20px;
 }
