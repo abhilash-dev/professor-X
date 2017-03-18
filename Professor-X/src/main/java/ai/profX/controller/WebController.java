@@ -29,6 +29,7 @@ import ai.profX.service.QuestionService;
 import ai.profX.util.Util;
 
 @RestController
+@RequestMapping("/game/*")
 public class WebController {
 	//TODO : To implement respective services for the requests here
 	
@@ -68,10 +69,10 @@ public class WebController {
 		// This method returns the question and the count
 		HttpSession session = request.getSession();
 		
-		List<Question> initialQuestions = (List<Question>) session.getAttribute("initialQuestions");
-		LinkedHashMap<Long, Integer> characterValues = (LinkedHashMap<Long, Integer>) session.getAttribute("characterValues");
-		HashMap<Long, Integer> askedQuestions = (HashMap<Long, Integer>) session.getAttribute("askedQuestions");
-		int questionCount = (int) session.getAttribute("questionCount");
+		initialQuestions = (List<Question>) session.getAttribute("initialQuestions");
+		characterValues = (LinkedHashMap<Long, Integer>) session.getAttribute("characterValues");
+		askedQuestions = (HashMap<Long, Integer>) session.getAttribute("askedQuestions");
+		questionCount = (int) session.getAttribute("questionCount");
 		
 		if(initialQuestions.isEmpty() && characterValues.isEmpty()){
 			initialQuestions = game.getInitialQuestions(initialQuestions);
@@ -100,9 +101,9 @@ public class WebController {
 	public @ResponseBody void answer(@PathVariable("questionId") long questionId,@PathVariable("answer") int answer,HttpServletRequest request){
 		HttpSession session = request.getSession();
 		
-		LinkedHashMap<Long, Integer> characterValues = (LinkedHashMap<Long, Integer>) session.getAttribute("characterValues");
-		HashMap<Long, Integer> askedQuestions = (HashMap<Long, Integer>) session.getAttribute("askedQuestions");
-		int questionCount = (int) session.getAttribute("questionCount");
+		characterValues = (LinkedHashMap<Long, Integer>) session.getAttribute("characterValues");
+		askedQuestions = (HashMap<Long, Integer>) session.getAttribute("askedQuestions");
+		questionCount = (int) session.getAttribute("questionCount");
 		
 		if(!Util.isAnswerValid(answer)){
 			answer = Constants.I_DONT_KNOW;
@@ -120,7 +121,7 @@ public class WebController {
 	@RequestMapping(method = RequestMethod.GET, value = "/guess")
 	public @ResponseBody String getGuess(HttpServletRequest request){
 		HttpSession session = request.getSession();
-		LinkedHashMap<Long, Integer> characterValues = (LinkedHashMap<Long, Integer>) session.getAttribute("characterValues");
+		characterValues = (LinkedHashMap<Long, Integer>) session.getAttribute("characterValues");
 		
 		Character character = game.guess(characterValues);
 		return character.getName();
@@ -129,6 +130,7 @@ public class WebController {
 	@RequestMapping(method = RequestMethod.POST, value = "/guess")
 	public @ResponseBody String postGuess(@RequestParam(value = "characterId", required = true) long characterId,HttpServletRequest request){
 		HttpSession session = request.getSession();
+		askedQuestions = (HashMap<Long, Integer>) session.getAttribute("askedQuestions");
 		game.learn(askedQuestions, characterId);
 		
 		resetGame(request);
@@ -139,7 +141,7 @@ public class WebController {
 	@RequestMapping(method = RequestMethod.GET, value = "/learn")
 	public @ResponseBody String getLearnInfo(HttpServletRequest request){
 		HttpSession session = request.getSession();
-		LinkedHashMap<Long, Integer> characterValues = (LinkedHashMap<Long, Integer>) session.getAttribute("characterValues");
+		characterValues = (LinkedHashMap<Long, Integer>) session.getAttribute("characterValues");
 		
 		List<Character> nearByCharacters = game.getNearByCharacters(characterValues, 20);
 		//TODO to convert this into proper json
@@ -153,7 +155,7 @@ public class WebController {
 			@RequestParam(value = "userQuestionText", required = false)String userQuestionText,
 			@RequestParam(value = "userQuestionAnswer", required = false)int userQuestionAnswer){
 		HttpSession session = request.getSession();
-		HashMap<Long, Integer> askedQuestions = (HashMap<Long, Integer>) session.getAttribute("askedQuestions");
+		askedQuestions = (HashMap<Long, Integer>) session.getAttribute("askedQuestions");
 		int answer = Constants.I_DONT_KNOW;
 		long newQuestionId = Constants.NON_EXISTENT_VALUE,newCharacterId = Constants.NON_EXISTENT_VALUE;
 		Question question;

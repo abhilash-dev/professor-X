@@ -1,15 +1,15 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8"/>
     <title>Professor-X</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css" />
-    <link href="../static/css/themify-icons.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="../static/css/themify-icons.css" th:href="@{/css/themify-icons.css}" rel="stylesheet" type="text/css" media="all" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flexslider/2.6.3/flexslider.min.css" />
-    <link href="../static/css/theme.css" rel="stylesheet" type="text/css" media="all" />
-    <link href='http://fonts.googleapis.com/css?family=Lato:300,400%7CRaleway:100,400,300,500,600,700%7COpen+Sans:400,500,600' rel='stylesheet' type='text/css'>
+    <link href="../static/css/theme.css" th:href="@{/css/theme.css}" rel="stylesheet" type="text/css" media="all" />
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400%7CRaleway:100,400,300,500,600,700%7COpen+Sans:400,500,600' rel='stylesheet' type='text/css'/>
 </head>
 
 <body >
@@ -19,8 +19,8 @@
             <nav class="bg-dark">
                 <div class="nav-bar">
                     <div class="module left">
-                        <a href="index.html">
-                            <img class="logo logo-light" alt="Professor-X" src="../static/img/logo-light.png" />
+                        <a href="index.html" th:href="@{http://localhost:8080/index}">
+                            <img class="logo logo-light" alt="Professor-X" src="../static/img/logo-light.png" th:src="@{/img/logo-light.png}" />
                         </a>
                     </div>
                     <div class="module widget-handle mobile-toggle right visible-sm visible-xs">
@@ -29,16 +29,10 @@
                     <div class="module-group right">
                         <div class="module left">
                             <ul class="menu">
-                                <li>
-                                    <a href="index.html">
-                                        Home
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="aboutus.html">
-                                        About Us
-                                    </a>
-                                </li>
+                                <li><a href="index.html"
+								th:href="@{/index}"> Home </a></li>
+							<li><a href="aboutus.html"
+								th:href="@{/aboutus}"> About Us </a></li>
                             </ul>
                         </div>
                         <!--end of menu module-->
@@ -52,13 +46,13 @@
                 <ul class="slides">
                     <li class="overlay image-bg bg-light">
                         <div class="background-image-holder">
-                            <img alt="image" class="background-image" src="../static/img/home23.jpg" />
+                            <img alt="image" class="background-image" src="../static/img/home23.jpg" th:src="@{/img/home23.jpg}"/>
                         </div>
                         <div class="container v-align-transform">
                             <div class="row">
                                 <div class="col-sm-10 col-sm-offset-1 text-center">
                                     <h1 class="mb40 mb-xs-16 large">Think of a Character. Imaginary or Real</h1>
-                                    <a class="btn btn-lg btn-filled" href="play.html">Start Playing</a>
+                                    <a class="btn btn-lg btn-filled" href="play.html" th:href="@{http://localhost:8080/play}">Start Playing</a>
                                     
                                 </div>
                             </div>
@@ -68,14 +62,14 @@
                     </li>
                     <li class="overlay image-bg">
                         <div class="background-image-holder">
-                            <img alt="image" class="background-image" src="../static/img/home22.jpg" />
+                            <img alt="image" class="background-image" src="../static/img/home22.jpg" th:src="@{/img/home22.jpg}" />
                         </div>
                         <div class="container v-align-transform">
                             <div class="row">
                                 <div class="col-sm-offset-1 text-center col-sm-10">
                                     <h1 class="mb40 mb-xs-16 large">Are you ready for the challenge?
                                         <br /></h1>
-                                        <a class="btn btn-lg btn-white " href="play.html">Start Playing</a>
+                                        <a class="btn btn-lg btn-white " href="play.html" th:href="@{http://localhost:8080/play}">Start Playing</a>
                                     </div>
                                 </div>
                                 <!--end of row-->
@@ -91,7 +85,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flexslider/2.6.3/jquery.flexslider-min.js"></script>
-        <script src="../static/js/scripts.js"></script>
+        <script src="../static/js/scripts.js" th:src="@{/js/scripts.js}"></script>
     </body>
 
     </html>

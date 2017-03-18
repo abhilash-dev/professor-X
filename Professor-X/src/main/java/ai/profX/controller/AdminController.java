@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.common.collect.Table;
-
 import ai.profX.model.Character;
 import ai.profX.model.Confidence;
 import ai.profX.model.Question;
@@ -23,6 +21,7 @@ import ai.profX.service.ConfidenceService;
 import ai.profX.service.QuestionService;
 
 @RestController
+@RequestMapping("/admin/*")
 public class AdminController {
 	
 	@Autowired
@@ -33,12 +32,6 @@ public class AdminController {
 	
 	@Autowired
 	private ConfidenceService confidenceService;
-	
-	@RequestMapping(method = RequestMethod.GET, value = "/admin")
-	public String admin() {
-		// display admin page here
-		return null;
-	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/dq")
 	public @ResponseBody List<Question> getQuestionsToDelete() {
@@ -107,6 +100,7 @@ public class AdminController {
 	@RequestMapping(method = RequestMethod.POST, value = "/retrain")
 	public @ResponseBody String postLearnInfo(@RequestParam ("retrainData") Map<String, Object> retrainMap) {
 		//TODO complete this method
+		return null;
 		
 	}
 }
