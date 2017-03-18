@@ -20,3 +20,7 @@
 .train{
 	display: none;
 }
+
+.custompadding{
+	padding: 10px 0;
+}

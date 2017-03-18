@@ -37,7 +37,7 @@ var dataSet = [
 [ "Unity Butler", "Marketing Designer", "San Francisco", "5384", "2009/12/09", "$85,675" ]
 ];
 
-$(document).ready(function() {
+var tableData = function(){
 	var table=$('#allData').DataTable( {
 		'fnCreatedRow': function (nRow, aData, iDataIndex) {
 			$(nRow).attr('id', 'my' + iDataIndex); 
@@ -66,6 +66,43 @@ $(document).ready(function() {
 		//rIds Data Population
 		deleteDbData(rIds);
 	} );
+};
+
+
+var tableDatas = function(){
+	var table=$('#allData').DataTable( {
+		'fnCreatedRow': function (nRow, aData, iDataIndex) {
+			$(nRow).attr('id', 'my' + iDataIndex); 
+		},
+		data: dataSet,
+		columns: [
+		{ title: "Name" },
+		{ title: "Position" },
+		{ title: "Office" },
+		{ title: "Extn." },
+		{ title: "Start date" },
+		{ title: "Salary" }
+		]
+		
+	} );
+
+	$('#allDatas tbody').on( 'click', 'tr', function () {
+		$(this).toggleClass('active');
+	} );
+
+	$('#rowsel').click( function () {
+		alert( table.rows('.active').ids().length +' row(s) selected' );
+		var idselected = table.rows('.active').data();
+		console.log(idselected);
+
+		//rIds Data Population
+		deleteDbData(rIds);
+	} );
+};
+
+
+$(document).ready(function() {
+	tableData();
 } );
 
 
@@ -79,6 +116,28 @@ var fetchDbData = function(){
 };
 
 
+var showQues = function(){
+	$('.ques').show();
+	$('.chars').hide();
+	$('.train').hide();
+	//tableData();
+
+};
+
+var showChar = function(){
+	$('.ques').hide();
+	$('.chars').show();
+	$('.train').hide();
+	tableDatas();
+
+};
+
+var showTrain = function(){
+	$('.ques').hide();
+	$('.chars').hide();
+	$('.train').show();
+
+};
 
 var deleteDbData = function(rIds){
 	$.post('URL', {rowIds: rIds, answerSelected: aSelected}, 
@@ -88,4 +147,5 @@ var deleteDbData = function(rIds){
 			console.log("error");
 		});
 	};
+
 
