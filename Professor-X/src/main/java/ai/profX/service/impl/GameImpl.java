@@ -19,6 +19,7 @@ import ai.profX.service.CharacterService;
 import ai.profX.service.ConfidenceService;
 import ai.profX.service.Game;
 import ai.profX.service.GameLogService;
+import ai.profX.service.NextSequenceService;
 import ai.profX.service.QuestionService;
 import ai.profX.util.Util;
 
@@ -36,6 +37,9 @@ public class GameImpl implements Game {
 	
 	@Autowired
 	private GameLogService gameLogService;
+	
+	@Autowired
+	private NextSequenceService nextSequenceService;
 
 	@Override
 	public List<Question> getInitialQuestions(List<Question> initialQuestions) {
@@ -47,8 +51,8 @@ public class GameImpl implements Game {
 		Question question = null;
 		int count = 0;
 		while (count != 2) {
-			potentialQuestionId = random.nextInt((int) questionService.getTotalQuestionCount()) + 1;
-			if (potentialQuestionId > 2) {
+			potentialQuestionId = random.nextInt((int) nextSequenceService.getCurrentSequence("question")) + 1;
+			if (potentialQuestionId!=1 && potentialQuestionId!=6) {
 				question = questionService.getQuestionById(potentialQuestionId);
 				if (question != null) {
 					initialQuestions.add(question);
@@ -56,7 +60,7 @@ public class GameImpl implements Game {
 				}
 			}
 		}
-		initialQuestions.add(questionService.getQuestionById(2));
+		initialQuestions.add(questionService.getQuestionById(6));
 
 		return initialQuestions;
 	}
@@ -87,10 +91,17 @@ public class GameImpl implements Game {
 
 		List<Character> nearByCharacters = new ArrayList<>();
 		Iterator<Long> charIdKeyIterator = sortedCharacterValues.keySet().iterator();
-		for (int i = 0; i < count; i++) {
-			Character character = characterService.getCharacterById(charIdKeyIterator.next());
-			if (character != null)
+		
+		int localCount = 0;
+		long key;
+		Character character = null;
+		while(charIdKeyIterator.hasNext() && localCount < count){
+			key = charIdKeyIterator.next();
+			character = characterService.getCharacterById(key);
+			if (character != null){
 				nearByCharacters.add(character);
+				localCount++;
+			}
 		}
 
 		return nearByCharacters;
@@ -105,10 +116,14 @@ public class GameImpl implements Game {
 
 		LinkedHashMap<Long, Integer> nearByCharacterValues = new LinkedHashMap<>();
 		Iterator<Long> charIdKeyIterator = sortedCharacterValues.keySet().iterator();
-		for (int i = 0; i < count; i++) {
-			nearByCharacterValues.put(charIdKeyIterator.next(), sortedCharacterValues.get(charIdKeyIterator.next()));
+		int localCount = 0;
+		long key;
+		
+		while(charIdKeyIterator.hasNext() && localCount < count){
+			key = charIdKeyIterator.next();
+			nearByCharacterValues.put(key, sortedCharacterValues.get(key));
+			localCount++;
 		}
-		nearByCharacterValues = sortCharacterValues(nearByCharacterValues);
 		return nearByCharacterValues;
 	}
 
@@ -136,20 +151,24 @@ public class GameImpl implements Game {
 				question.getQuestionId());
 		long total = characterList.size();
 
-		Double positiveFraction = 0.0, negativeFraction = 0.0, entropy = 0.0;
-
+		double positiveFraction = 0.0, negativeFraction = 0.0, entropy = 0.0;
+		double pOfI = (double)positives/total;
+		double nOfI = (double)negatives/total;
+		double sOfI = (double)(positives + negatives)/total;
+		
 		if (positives != 0)
-			positiveFraction = (-1 * positives) / total * DoubleMath.log2(positives / total);
+			positiveFraction = (-1 * pOfI) * DoubleMath.log2(pOfI);
 		if (negatives != 0)
-			negativeFraction = (-1 * negatives) / total * DoubleMath.log2(negatives / total);
+			negativeFraction = (-1 * nOfI) * DoubleMath.log2(nOfI);
 
 		entropy = positiveFraction + negativeFraction;
-		entropy *= (positives + negatives) / total;
+		entropy = entropy * sOfI;
 
-		if (entropy != 0.0)
-			entropy = 1 / entropy;
-		else
+		try{
+			entropy = (double)1/entropy;
+		}catch (Exception e) {
 			entropy = Double.POSITIVE_INFINITY;
+		}
 
 		return entropy;
 	}
@@ -191,10 +210,13 @@ public class GameImpl implements Game {
 	public List<Character> getObjectsBasedOnCountInSortedOrder(LinkedHashMap<Long, Integer> sortedCharacterValues,int count){
 		List<Character> characterList = new ArrayList<>();
 		Iterator<Long> chracterIdIterator = sortedCharacterValues.keySet().iterator();
-		while(chracterIdIterator.hasNext()){
+		int localCount = 0;
+		while(chracterIdIterator.hasNext() && localCount < count){
 			Character character = characterService.getCharacterById(chracterIdIterator.next());
-			if(character!=null)
+			if(character!=null){
 				characterList.add(character);
+				localCount++;
+			}
 		}
 		return characterList;
 	}

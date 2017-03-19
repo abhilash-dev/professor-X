@@ -27,4 +27,14 @@ public class NextSequenceServiceImpl implements NextSequenceService{
             CustomSequences.class);
         return counter.getSeq();
     }
+
+	@Override
+	public int getCurrentSequence(String seqName) {
+		 CustomSequences counter = mongo.findAndModify(
+		            query(where("_id").is(seqName)),
+		            new Update().inc("seq",0),
+		            options().returnNew(true).upsert(true),
+		            CustomSequences.class);
+		        return (int) counter.getSeq();
+	}
 }

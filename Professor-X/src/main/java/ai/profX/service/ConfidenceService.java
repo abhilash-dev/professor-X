@@ -13,5 +13,6 @@ public interface ConfidenceService {
 	public int getConfidenceValue(long charId, long questionId);
 	public List<Confidence> getConfidenceByQuestionId(long questionId);
 	public List<Confidence> getConfidenceByCharacterId(long charId);
-	public Table<Long, Long, Integer> getAllConfidenceValues();	
+	public Table<Long, Long, Integer> getAllConfidenceValues();
+	public Confidence getConfidence(long charId, long questionId);
 }

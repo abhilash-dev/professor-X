@@ -201,5 +201,12 @@ public class WebController {
 		session.invalidate();
 	}
 	
+	@RequestMapping(method = RequestMethod.GET, value = "/predict")
+	public @ResponseBody LinkedHashMap<Long,Integer> predict(HttpServletRequest request){
+		HttpSession session = request.getSession();
+		characterValues = (LinkedHashMap<Long, Integer>) session.getAttribute("characterValues");
+		return game.getNearbyCharacterValues(characterValues, 10);
+	}
+	
 	
 }

@@ -14,6 +14,7 @@ import ai.profX.model.repo.CharacterRepo;
 import ai.profX.model.repo.ConfidenceRepo;
 import ai.profX.service.CharacterService;
 import ai.profX.service.ConfidenceService;
+import ai.profX.service.NextSequenceService;
 import ai.profX.service.QuestionService;
 
 @Service
@@ -32,7 +33,7 @@ public class CharacterServiceImpl implements CharacterService {
 	private ConfidenceService confidenceService;
 
 	@Autowired
-	private NextSequenceServiceImpl nextSequenceService;
+	private NextSequenceService nextSequenceService;
 	
 	@Override
 	public long addNewCharacter(String name) {

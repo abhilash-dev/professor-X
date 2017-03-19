@@ -42,6 +42,7 @@ public class ConfidenceServiceImpl implements ConfidenceService {
 		Confidence confidence = confidenceRepo.findByCharacterIdAndQuestionId(charId, questionId);
 		if (confidence != null) {
 			confidence.setValue(value);
+			confidenceRepo.save(confidence);
 		} else {
 			Confidence newConfidence = new Confidence(charId, questionId, value);
 			confidenceRepo.save(newConfidence);
@@ -138,5 +139,11 @@ public class ConfidenceServiceImpl implements ConfidenceService {
 		}
 
 		return table;
+	}
+
+	@Override
+	public Confidence getConfidence(long charId, long questionId) {
+		Confidence confidence = confidenceRepo.findByCharacterIdAndQuestionId(charId, questionId);
+		return confidence;
 	}
 }
