@@ -270,19 +270,19 @@ public class GameImpl implements Game {
 	}
 
 	@Override
-	public long learnCharacter(HashMap<Long, Integer> askedQuestions, String text) {
+	public long learnCharacter(HashMap<Long, Integer> askedQuestions, String text,Boolean finalAnswer) {
 		Character character;
 		if(text.trim()!=""){
 			character = characterService.getCharacterByName(text.trim().toLowerCase());
 			if(character!=null){
 				long characterId = character.getCharId();
-				learn(askedQuestions, characterId);
+				learn(askedQuestions, characterId,finalAnswer);
 				
 				return characterId;
 			
 			}else{
 				long newCharacterId = characterService.addNewCharacter(text);
-				learn(askedQuestions, newCharacterId);
+				learn(askedQuestions, newCharacterId,finalAnswer);
 				
 				return newCharacterId;
 			}
@@ -291,7 +291,7 @@ public class GameImpl implements Game {
 	}
 
 	@Override
-	public void learn(HashMap<Long, Integer> askedQuestions, long charId) {
+	public void learn(HashMap<Long, Integer> askedQuestions, long charId,Boolean finalAnswer) {
 		Iterator<Long> questionIdIterator = askedQuestions.keySet().iterator();
 		while(questionIdIterator.hasNext()){
 			long questionId = questionIdIterator.next();
@@ -305,7 +305,7 @@ public class GameImpl implements Game {
 		}
 		
 		characterService.updateNoOfTimesPlayed(charId);
-		gameLogService.addGameLog(charId, askedQuestions, true); //TODO to somehow get the answer in this method and update the same
+		gameLogService.addGameLog(charId, askedQuestions, finalAnswer); //TODO to somehow get the answer in this method and update the same
 
 	}
 

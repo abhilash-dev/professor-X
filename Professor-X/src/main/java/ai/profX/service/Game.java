@@ -17,6 +17,6 @@ public interface Game {
 	public Question chooseQuestion(List<Question> initialQuestions, LinkedHashMap<Long, Integer> characterValues, HashMap<Long, Integer> askedQuestions, int count);
 	public void updateLocalKnowledge(LinkedHashMap<Long, Integer> characterValues, HashMap<Long, Integer> askedQuestions, long questionId, int answer);
 	public Character guess(LinkedHashMap<Long, Integer> characterValues);
-	public long learnCharacter(HashMap<Long, Integer> askedQuestions, String text);
-	public void learn(HashMap<Long, Integer> askedQuestions, long charId);
+	public long learnCharacter(HashMap<Long, Integer> askedQuestions, String text,Boolean finalAnswer);
+	public void learn(HashMap<Long, Integer> askedQuestions, long charId,Boolean finalAnswer);
 }

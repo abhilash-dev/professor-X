@@ -17,8 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 
 import ai.profX.common.Constants;
 import ai.profX.model.Character;
@@ -31,7 +30,6 @@ import ai.profX.util.Util;
 @RestController
 @RequestMapping("/game/*")
 public class WebController {
-	//TODO : To implement respective services for the requests here
 	
 	@Autowired
 	private Game game;
@@ -47,6 +45,8 @@ public class WebController {
 	public static LinkedHashMap<Long, Integer> characterValues;
 	public static int questionCount;
 	
+	Gson gson = new Gson();
+	Boolean finalAnswer = false;
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/init")
 	public @ResponseBody void initSession(HttpServletRequest request){
@@ -62,7 +62,7 @@ public class WebController {
 		session.setAttribute("characterValues", characterValues);
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/")
+	@RequestMapping(method = RequestMethod.GET, value = "/question")
 	public @ResponseBody String showIndex(HttpServletRequest request){
 		Map<String,Object> responseMap = new HashMap<>();
 		String response = null;
@@ -81,20 +81,16 @@ public class WebController {
 		
 		Question question = game.chooseQuestion(initialQuestions, characterValues, askedQuestions, 10);
 		
+		//TODO the if portion is to be handled from the front-end
 		if(question==null || questionCount > 20){
 			return response; //TODO to redirect it to Guess
 		}else{
 			responseMap.put("question", question);
 			responseMap.put("questionCount", questionCount);
-			try {
-				response = new ObjectMapper().writeValueAsString(responseMap);
-			} catch (JsonProcessingException e) {
-				e.printStackTrace();
-			}
-			return response;
+			response = gson.toJson(responseMap);
 		}
 		
-		//TODO when this method is hit
+		return response;
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/answer/{questionId}/{answer}")
@@ -115,7 +111,6 @@ public class WebController {
 		}
 		
 		game.updateLocalKnowledge(characterValues, askedQuestions, questionId, answer);
-		//TODO redirect to index
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/guess")
@@ -128,14 +123,19 @@ public class WebController {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/guess")
-	public @ResponseBody String postGuess(@RequestParam(value = "characterId", required = true) long characterId,HttpServletRequest request){
+	public @ResponseBody void postGuess(@RequestParam(value = "characterId", required = true) long characterId,@RequestParam(value = "finalAnswer", required = true) Boolean finalAnswer,HttpServletRequest request){
 		HttpSession session = request.getSession();
 		askedQuestions = (HashMap<Long, Integer>) session.getAttribute("askedQuestions");
-		game.learn(askedQuestions, characterId);
-		
-		resetGame(request);
-		//TODO redirect to index page
-		return null;
+		this.finalAnswer = finalAnswer;
+		//If we have guessed the character correctly, update the confidences for the chosen character, reset the game and redirect to landing page
+		//TODO the redirection in both if and else must be handled by front-end
+		if(finalAnswer){
+			game.learn(askedQuestions, characterId,finalAnswer);
+			resetGame(request);
+			//TODO redirect to index page
+		}else{
+			//If we guessed it wrong, then redirect it to /learn ( GET )
+		}
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/learn")
@@ -144,12 +144,13 @@ public class WebController {
 		characterValues = (LinkedHashMap<Long, Integer>) session.getAttribute("characterValues");
 		
 		List<Character> nearByCharacters = game.getNearByCharacters(characterValues, 20);
-		//TODO to convert this into proper json
-		return null;
+		
+		String response = gson.toJson(nearByCharacters);
+		return response;
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/learn")
-	public @ResponseBody String postLearnInfo(HttpServletRequest request,
+	public @ResponseBody void postLearnInfo(HttpServletRequest request,
 			@RequestParam(value = "newCharacter", required = true)Boolean newCharacter,
 			@RequestParam(value = "characterName", required = true)String characterName,
 			@RequestParam(value = "userQuestionText", required = false)String userQuestionText,
@@ -176,7 +177,7 @@ public class WebController {
 		}
 		
 		if(!characterName.trim().isEmpty()){
-			newCharacterId = game.learnCharacter(askedQuestions, characterName.trim());
+			newCharacterId = game.learnCharacter(askedQuestions, characterName.trim(),finalAnswer);
 		}
 		
 		if(newQuestionId!=Constants.NON_EXISTENT_VALUE && newCharacterId!=Constants.NON_EXISTENT_VALUE){
@@ -184,15 +185,13 @@ public class WebController {
 		}
 		
 		resetGame(request);
-		
-		//TODO redirect to index
-		return null;
+		//TODO redirect to index to be handled by front-end
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/restart")
 	public @ResponseBody void restart(HttpServletRequest request){
 		resetGame(request);
-		//TODO reditect back to index
+		//TODO redirect back to index to be handled by front-end
 	}
 	
 	public void resetGame(HttpServletRequest request){
@@ -202,11 +201,10 @@ public class WebController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/predict")
-	public @ResponseBody LinkedHashMap<Long,Integer> predict(HttpServletRequest request){
+	public @ResponseBody String predict(HttpServletRequest request){
 		HttpSession session = request.getSession();
 		characterValues = (LinkedHashMap<Long, Integer>) session.getAttribute("characterValues");
-		return game.getNearbyCharacterValues(characterValues, 10);
+		LinkedHashMap<Long, Integer> responseMap = game.getNearbyCharacterValues(characterValues, 10); 
+		return gson.toJson(responseMap);
 	}
-	
-	
 }
