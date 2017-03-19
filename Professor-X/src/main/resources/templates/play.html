@@ -70,7 +70,7 @@
 					<div class="col-sm-6">
 						<div class="feature feature-1 boxed"
 							style="background-color: rgb(191, 215, 255); text-align: center;">
-							<img src="../static/img/Question.png"
+							<img id="characterimage" src="../static/img/Question.png"
 								th:src="@{/img/Question.png}" class="imgsize"
 								style="margin: 0 auto;" />
 						</div>
@@ -82,67 +82,42 @@
 						<div class="feature feature-1 boxed feature-colour">
 							<div class="text-center speechbubble speechbubblett"
 								id="contentbox">
-								<h4>Question No.</h4>
-								<h5 id="questionplaceholder">Replace with Question from
-									Back-end</h5>
+								<h4>Question No. <span id="qno"></span></h4>
+								<h5 class="uppercase" id="questionplaceholder">.</h5>
 							</div>
 							<div class="clear"></div>
 							<form class="formselection">
 
 								<div>
-									<div class="radio-option checked">
+									<div class="radio-option">
 										<div class="inner"></div>
-										<input type="radio" name="answerchoice" value="radio1" />
+										<input type="radio" name="answerchoice" value="1" />
 									</div>
 									<span class="fontcolour">Yes</span>
 								</div>
 								<div>
 									<div class="radio-option">
 										<div class="inner"></div>
-										<input type="radio" name="answerchoice" value="radio1" />
+										<input type="radio" name="answerchoice" value="-1" />
 									</div>
 									<span class="fontcolour">No</span>
 								</div>
 								<div>
 									<div class="radio-option">
 										<div class="inner"></div>
-										<input type="radio" name="answerchoice" value="radio1" />
+										<input type="radio" name="answerchoice" value="0" />
 									</div>
 									<span class="fontcolour">Maybe</span>
 								</div>
 							</form>
 							<div class="text-center" style="margin-left: 40px;">
-								<a class="btn btn-lg btn-filled marg" href="#">Submit</a> <a
-									class="btn btn-lg btn-red marg" href="#">Reset</a>
+								<button class="btn btn-lg btn-filled marg" onclick="submitanswer()">Submit</button> 
+								<button class="btn btn-lg btn-red marg" onclick="restart()">Restart</button>
 							</div>
 						</div>
 						<!--end of feature-->
 					</div>
 					<!--end of row-->
-				</div>
-			</div>
-			<!--end of container-->
-		</section>
-
-
-		<section class="guessing" style="padding: 30px 0">
-			<div class="container">
-				<div class="row">
-					<!--end of feature-->
-
-
-					<div class="col-sm-12">
-						<div class="feature feature-1 boxed feature-colour">
-							<div class="text-center" id="possible">
-								<h4>Possibilities</h4>
-								<h5 id="questionplaceholder">Replace with Content from
-									Back-end</h5>
-							</div>
-							<div class="clear"></div>
-							<!--end of feature-->
-						</div>
-						<!--end of row-->
-					</div>
 				</div>
 			</div>
 			<!--end of container-->
@@ -165,9 +140,9 @@
 						<div class="feature feature-1 boxed feature-colour">
 							<div class="text-center contentbox">
 								<h5>The Character you thought of is</h5>
-								<h4 class="uppercase">Character name</h4>
+								<h4 id="charguess" class="uppercase">Character name</h4>
 								<img id="ourguess" src="http://placehold.it/200x200"
-									th:src="@{http://placehold.it/200x200}"
+									
 									style="margin-bottom: 24px;"/>
 
 							</div>
@@ -221,5 +196,6 @@
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
 	<script src="../static/js/scripts.js" th:src="@{/js/scripts.js}"></script>
+	<script src="../static/js/start.js" th:src="@{/js/gameplay.js}"></script>
 </body>
 </html>
