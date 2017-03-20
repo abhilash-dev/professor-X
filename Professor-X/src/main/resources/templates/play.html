@@ -37,10 +37,9 @@
 				<div class="module-group right">
 					<div class="module left">
 						<ul class="menu">
-							<li><a href="index.html"
-								th:href="@{/index}"> Home </a></li>
-							<li><a href="aboutus.html"
-								th:href="@{/aboutus}"> About Us </a></li>
+							<li><a href="index.html" th:href="@{/index}"> Home </a></li>
+							<li><a href="aboutus.html" th:href="@{/aboutus}"> About
+									Us </a></li>
 						</ul>
 					</div>
 					<!--end of menu module-->
@@ -82,14 +81,16 @@
 						<div class="feature feature-1 boxed feature-colour">
 							<div class="text-center speechbubble speechbubblett"
 								id="contentbox">
-								<h4>Question No. <span id="qno"></span></h4>
+								<h4>
+									Question No. <span id="qno"></span>
+								</h4>
 								<h5 class="uppercase" id="questionplaceholder">.</h5>
 							</div>
 							<div class="clear"></div>
-							<form class="formselection">
+							<form class="formselect">
 
 								<div>
-									<div class="radio-option">
+									<div class="radio-option checked">
 										<div class="inner"></div>
 										<input type="radio" name="answerchoice" value="1" />
 									</div>
@@ -111,7 +112,8 @@
 								</div>
 							</form>
 							<div class="text-center" style="margin-left: 40px;">
-								<button class="btn btn-lg btn-filled marg" onclick="submitanswer()">Submit</button> 
+								<button class="btn btn-lg btn-filled marg"
+									onclick="submitanswer()">Submit</button>
 								<button class="btn btn-lg btn-red marg" onclick="restart()">Restart</button>
 							</div>
 						</div>
@@ -129,8 +131,8 @@
 					<div class="col-sm-6">
 						<div class="feature feature-1 boxed"
 							style="background-color: rgb(191, 215, 255); text-align: center;">
-							<img src="img/yesno.png" th:src="@{/img/yesno.png}"
-								class="imgsize" style="margin: 0 auto;"/>
+							<img src="../static/img/yesno.png" th:src="@{/img/yesno.png}"
+								class="imgsize" style="margin: 0 auto;" />
 						</div>
 					</div>
 					<!--end of feature-->
@@ -142,15 +144,15 @@
 								<h5>The Character you thought of is</h5>
 								<h4 id="charguess" class="uppercase">Character name</h4>
 								<img id="ourguess" src="http://placehold.it/200x200"
-									
-									style="margin-bottom: 24px;"/>
+									style="margin-bottom: 24px;" />
 
 							</div>
 							<div class="clear"></div>
 
 							<div class="text-center">
-								<a class="btn btn-lg btn-filled marg" href="#">Correct</a> <a
-									class="btn btn-lg btn-red marg" href="#">Incorrect</a>
+								<button class="btn btn-lg btn-filled marg"
+									onclick="viewThanks()">Correct</button>
+								<button class="btn btn-lg btn-red marg" onclick="wrongAnswer()">Incorrect</button>
 							</div>
 						</div>
 						<!--end of feature-->
@@ -170,8 +172,6 @@
 							<div class="title mb16">
 								<h5 class="uppercase mb0" id="correctGuess"
 									style="font-size: 26px">Yay! We guessed it right.</h5>
-								<h5 class="uppercase mb0" id="wrongGuess"
-									style="font-size: 26px">Sorry, We tried our best.</h5>
 								<h5 class="uppercase mb0"
 									style="font-size: 22px; margin-top: 30px;">Thank you for
 									playing.</h5>
@@ -179,8 +179,80 @@
 							<p class="mb0" style="font-size: 20px; margin-top: 30px;">Do
 								you wish to play again?</p>
 							<div class="text-center" style="margin-top: 30px;">
-								<a class="btn btn-lg btn-filled marg" href="#">Yes</a> <a
-									class="btn btn-lg btn-red marg" href="#">No</a>
+								<button class="btn btn-lg btn-filled marg"
+									onclick="pageReload()">Yes</button>
+								<button class="btn btn-lg btn-red marg" onclick="homeRedirect()">No</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--end of row-->
+			</div>
+		</section>
+
+		<section class="wrongAnswer">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12 col-sm-12">
+						<div class="text-center">
+							<div class="title mb16">
+								<h5 class="uppercase mb0" id="correctGuess"
+									style="font-size: 26px">Well, we tried our best.</h5>
+								<h5 class="uppercase mb0"
+									style="font-size: 22px; margin-top: 30px;">Can you tell us
+									more about your character?</h5>
+								<h5 style="margin-top: 30px;">Is your character one of
+									these?</h5>
+							</div>
+
+							<form class="formselection suggestion" id="learnandadd">
+								<div id="radioplacement" class="radioTarget"></div>
+								<h5>If your character is not one of above, please answer
+									the following.</h5>
+								<h5 style="margin-top: 30px;">Is your character a new
+									Character?</h5>
+								<div id="radioplacement">
+									<div>
+										<div class="radio-option">
+											<div class="inner"></div>
+											<input type="radio" name="newCharacter" value="1" />
+										</div>
+										<span class="fontcolour">Yes</span>
+									</div>
+									<div>
+										<div class="radio-option">
+											<div class="inner"></div>
+											<input type="radio" name="newCharacter" value="-1" />
+										</div>
+										<span class="fontcolour">No</span>
+									</div>
+								</div>
+								<h5>What is the name of your character?</h5>
+								<input type="text" id="characterName" name="characterName"
+									required />
+								<h5>Add your own question. (Optional)</h5>
+								<input type="text" id="userQuestionText" name="userQuestionText" />
+								<h5>What is the answer to your question? (Optional)</h5>
+								<div id="radioplacement">
+									<div>
+										<div class="radio-option">
+											<div class="inner"></div>
+											<input type="radio" name="userQuestionAnswer" value="1" />
+										</div>
+										<span class="fontcolour">Yes</span>
+									</div>
+									<div>
+										<div class="radio-option">
+											<div class="inner"></div>
+											<input type="radio" name="userQuestionAnswer" value="-1" />
+										</div>
+										<span class="fontcolour">No</span>
+									</div>
+								</div>
+							</form>
+
+							<div class="text-center" style="margin-top: 30px;">
+								<button class="btn btn-lg btn-filled marg" onlclick="learn()">Submit</button>
 							</div>
 						</div>
 					</div>
@@ -196,6 +268,6 @@
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
 	<script src="../static/js/scripts.js" th:src="@{/js/scripts.js}"></script>
-	<script src="../static/js/start.js" th:src="@{/js/gameplay.js}"></script>
+	<script src="../static/js/gameplay.js" th:src="@{/js/gameplay.js}"></script>
 </body>
 </html>
