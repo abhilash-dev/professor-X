@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- <ehcache> <diskStore path="java.io.tmpdir" /> <defaultCache maxElementsInMemory="0" 
+	eternal="true" overflowToDisk="true" /> </ehcache> -->
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="ehcache.xsd"
+	updateCheck="true"
+	monitoring="autodetect"
+	dynamicConfig="true">
+
+	<diskStore path="java.io.tmpdir" />
+
+	<cache name="characterCache"
+		maxElementsInMemory="0" 
+		eternal="true">
+		<!-- maxEntriesLocalHeap="10000"
+		maxEntriesLocalDisk="1000"
+		eternal="false"
+		diskSpoolBufferSizeMB="20"
+		timeToIdleSeconds="300" timeToLiveSeconds="600"
+		memoryStoreEvictionPolicy="LFU"
+		transactionalMode="off">
+		<persistence strategy="localTempSwap" /> -->
+	</cache>
+	
+	<cache name="confidenceCache"
+		maxElementsInMemory="0" 
+		eternal="true">
+		<!-- maxEntriesLocalHeap="10000"
+		maxEntriesLocalDisk="1000"
+		eternal="false"
+		diskSpoolBufferSizeMB="20"
+		timeToIdleSeconds="300" timeToLiveSeconds="600"
+		memoryStoreEvictionPolicy="LFU"
+		transactionalMode="off">
+		<persistence strategy="localTempSwap" /> -->
+	</cache>
+	
+	<cache name="gameCache"
+		maxElementsInMemory="0" 
+		eternal="true">
+		<!-- maxEntriesLocalHeap="10000"
+		maxEntriesLocalDisk="1000"
+		eternal="false"
+		diskSpoolBufferSizeMB="20"
+		timeToIdleSeconds="300" timeToLiveSeconds="600"
+		memoryStoreEvictionPolicy="LFU"
+		transactionalMode="off">
+		<persistence strategy="localTempSwap" /> -->
+	</cache>
+	
+	<cache name="questionCache"
+		maxElementsInMemory="0" 
+		eternal="true">
+		<!-- maxEntriesLocalHeap="10000"
+		maxEntriesLocalDisk="1000"
+		eternal="false"
+		diskSpoolBufferSizeMB="20"
+		timeToIdleSeconds="300" timeToLiveSeconds="600"
+		memoryStoreEvictionPolicy="LFU"
+		transactionalMode="off">
+		<persistence strategy="localTempSwap" /> -->
+	</cache>
+</ehcache>

@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import ai.profX.model.Character;
@@ -34,6 +35,7 @@ public class QuestionServiceImpl implements QuestionService {
 	private NextSequenceService nextSequenceService;
 
 	@Override
+	@Cacheable("questionCache")
 	public List<Question> getAllQuestions() {
 		List<Question> questionList = questionRepo.findAll();
 		if (questionList.size() > 0)
