@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import ai.profX.model.Character;
@@ -104,7 +105,8 @@ public class CharacterServiceImpl implements CharacterService {
 		Confidence confidence;
 
 		while (it.hasNext()) {
-			confidence = confidenceRepo.findByCharacterIdAndQuestionId(it.next().getCharId(), questionId);
+			Character character = it.next();
+			confidence = confidenceRepo.findByCharacterIdAndQuestionId(character.getCharId(), questionId);
 			if (confidence.getValue() > 0) {
 				count++;
 			}
@@ -119,7 +121,8 @@ public class CharacterServiceImpl implements CharacterService {
 		Confidence confidence;
 
 		while (it.hasNext()) {
-			confidence = confidenceRepo.findByCharacterIdAndQuestionId(it.next().getCharId(), questionId);
+			Character character = it.next();
+			confidence = confidenceRepo.findByCharacterIdAndQuestionId(character.getCharId(), questionId);
 			if (confidence.getValue() < 0) {
 				count++;
 			}

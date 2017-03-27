@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.google.common.math.DoubleMath;
@@ -305,7 +306,7 @@ public class GameImpl implements Game {
 		}
 		
 		characterService.updateNoOfTimesPlayed(charId);
-		gameLogService.addGameLog(charId, askedQuestions, finalAnswer); //TODO to somehow get the answer in this method and update the same
+		gameLogService.addGameLog(charId, askedQuestions, finalAnswer);
 
 	}
 
