@@ -20,6 +20,9 @@ Professor-X/.gitignore
 Professor-X/.mvn
 Professor-X/mvnw
 Professor-X/mvnw.cmd
+Professor-X/.classpath
+Professor-X/.project
+Professor-X/.settings/
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*

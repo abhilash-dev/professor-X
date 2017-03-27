@@ -112,3 +112,21 @@
 #radioplacement {
 	display: inline-flex;
 }
+
+/* .wrongAnswer{
+	display: block;
+}
+
+.questionpanel{
+	display:none;
+}
+.afterguess{
+	display:none;
+}
+.thanks{
+	display:none;
+}
+ */
+#spanspace{
+	margin-left: 10px;
+}
