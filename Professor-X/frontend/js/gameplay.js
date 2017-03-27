@@ -19,12 +19,12 @@ window.onload = function () {
 };
 
 var initSession = function () {
-	$.get(URL + "init");
+	$.get("http://localhost:8080/game/init");
 }
 
 var fetchQuestion = function () {
 	setTimeout(function () {
-		$.get(URL + "question", function (data, status) {
+		$.get("http://localhost:8080/game/question", function (data, status) {
 			data = JSON.parse(data);
 			ques = data.question.text;
 			quesId = data.question.questionId;
@@ -33,7 +33,7 @@ var fetchQuestion = function () {
 			$("#qno").html(quesNo);
 			$("#questionplaceholder").html(ques);
 		});
-	}, 500);
+	}, 5000);
 };
 
 var submitanswer = function () {
