@@ -1,10 +1,11 @@
 package ai.profX.controller;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,14 +44,25 @@ public class AdminController {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/dq")
-	public @ResponseBody void deleteQuestions(@RequestParam List<Long> questionIdList) {
+	public @ResponseBody void deleteQuestions(@RequestParam String questionIds) {
+		JSONObject jsonObject = new JSONObject(questionIds);
+		JSONArray array = jsonObject.getJSONArray("questionIds");
+
+		List<Long> questionIdList = new ArrayList<Long>();
+		if (array != null) {
+			for (int i=0;i<array.length();i++){
+				questionIdList.add(array.getLong(i));
+			}
+		}
+
 		if(questionIdList!=null && !questionIdList.isEmpty()){
 			Iterator<Long> questionIdIterator = questionIdList.iterator();
 			Question question = null;
 			while(questionIdIterator.hasNext()){
-				question = questionService.getQuestionById(questionIdIterator.next());
+				Long questionId = questionIdIterator.next();
+				question = questionService.getQuestionById(questionId);
 				if(question!=null){
-					questionService.removeQuestion(questionIdIterator.next());
+					questionService.removeQuestion(questionId);
 				}
 			}
 		}
@@ -63,14 +75,24 @@ public class AdminController {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/dc")
-	public @ResponseBody void deleteCharacters(@RequestParam List<Long> characterIdList) {
+	public @ResponseBody void deleteCharacters(@RequestParam String characterIds) {
+		JSONObject jsonObject = new JSONObject(characterIds);
+		JSONArray array = jsonObject.getJSONArray("characterIds");
+
+		List<Long> characterIdList = new ArrayList<Long>();
+		if (array != null) {
+			for (int i=0;i<array.length();i++){
+				characterIdList.add(array.getLong(i));
+			}
+		}
 		if(characterIdList!=null && !characterIdList.isEmpty()){
 			Iterator<Long> characterIdIterator = characterIdList.iterator();
 			
 			while(characterIdIterator.hasNext()){
-				Character character = characterService.getCharacterById(characterIdIterator.next());
+				Long characterId = characterIdIterator.next();
+				Character character = characterService.getCharacterById(characterId);
 				if(character!=null){
-					characterService.removeCharacter(characterIdIterator.next());
+					characterService.removeCharacter(characterId);
 				}
 			}
 		}
