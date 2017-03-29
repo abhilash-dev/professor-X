@@ -21,9 +21,9 @@ public class TestQuestionService {
 	public void test(){
 		System.out.println(questionService.getTotalQuestionCount());
 		
-		questionService.addQuestion("Is your character alive?");
+		questionService.addQuestion("Dummy questions 2?");
 		
-		Question question = questionService.getQuestionByText("is your character alive?");
+		Question question = questionService.getQuestionByText("Dummy questions 2?");
 		if(question!=null)
 			System.out.println(question.getQuestionId());
 	}

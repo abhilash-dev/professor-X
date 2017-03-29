@@ -6,6 +6,7 @@ public class Constants {
 	public static final int POS_WEIGHT_CUTOFF = 10;
 	public static final int NEG_WEIGHT_CUTOFF = -10;
 	public static final int NEW_QUESTION_SCALE = 5;
+	public static final int RETRAIN_SCALE = 2;
 	public static final int YES = 1;
 	public static final int NO = -1;
 	public static final int I_DONT_KNOW = 0;
