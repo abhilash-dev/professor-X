@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Random;
+
+import ai.profX.util.GameLogWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -44,10 +46,9 @@ public class GameImpl implements Game {
 
 	@Override
 	public List<Question> getInitialQuestions(List<Question> initialQuestions) {
-		Question question1 = questionService.getQuestionById(1);
-		initialQuestions.add(question1);
+		initialQuestions.add(questionService.getQuestionById(6));
 
-		Random random = new Random(System.nanoTime());
+		/*Random random = new Random(System.nanoTime());
 		long potentialQuestionId;
 		Question question = null;
 		int count = 0;
@@ -60,8 +61,14 @@ public class GameImpl implements Game {
 					count++;
 				}
 			}
-		}
-		initialQuestions.add(questionService.getQuestionById(6));
+		}*/
+
+		// Temp questions, necessary to track the diff b/w 2 systems
+		//begin
+		initialQuestions.add(questionService.getQuestionById(9));
+		initialQuestions.add(questionService.getQuestionById(3));
+		//end
+		initialQuestions.add(questionService.getQuestionById(1));
 
 		return initialQuestions;
 	}
@@ -236,7 +243,7 @@ public class GameImpl implements Game {
 			}
 		}else{
 			List<Confidence> weights = confidenceService.getConfidenceByQuestionId(questionId);
-			int localValue,confidenceValue;
+			int localValue,confidenceValue,oldCharacterValue,newCharacterValue;
 			long key;
 			
 			for(Confidence weight:weights){
@@ -248,20 +255,21 @@ public class GameImpl implements Game {
 					else if(confidenceValue < Constants.NEG_WEIGHT_CUTOFF)
 						localValue = Constants.NEG_WEIGHT_CUTOFF;
 					else if(confidenceValue < Constants.I_DONT_KNOW)
-						localValue = confidenceValue/2;
+						localValue = Math.floorDiv(confidenceValue,2);
 					else
 						localValue = confidenceValue;
 					
 					if((answer == Constants.NO && localValue > 0) || (answer == Constants.YES && localValue < 0))
 						localValue *= 5;
 					
-					
-					characterValues.replace(key, characterValues.get(key), localValue);
+					oldCharacterValue = characterValues.get(key);
+					newCharacterValue = oldCharacterValue + (answer * localValue);
+					characterValues.replace(key, oldCharacterValue, newCharacterValue);
 				}
 			}
 			askedQuestions.put(questionId, answer);
 		}
-
+		GameLogWriter.writeToFile(characterValues,askedQuestions,questionId,answer);
 	}
 
 	@Override

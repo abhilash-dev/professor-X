@@ -11,6 +11,7 @@ public class ProfessorXApplicationTests {
 
 	@Test
 	public void contextLoads() {
+		System.out.println(Math.floorDiv(3,2));
 	}
 
 }

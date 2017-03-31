@@ -1,62 +1,64 @@
 //ACTUAL CODE
+var dqArray = [];
 var URL = "http://localhost:8080/admin/";
-window.onload = function () {
-    fetchQuestion();
-}
+$(document).ready(function () {
+    $.ajax({
+        url: 'http://localhost:8080/admin/dq',
+        success: function (response) {
+            var table = $('#allData').DataTable({
+                data: response,
+                columns: [
+                    { "data": "questionId" },
+                    { "data": "text" },
+                    { "data": "createdDateTime" }
+                ],
+            });
+            $('#allData tbody').on('click', 'tr', function () {
+                $(this).toggleClass('active');
+            });
 
-var dataSet = [];
-var createDataSet = function (data) {
-    for (var i = 0; i < data.length; i++) {
-        var temp = [];
-        temp.push(data[i].questionId);
-        temp.push(data[i].text);
-        temp.push(data[i].createdDateTime);
-        dataSet.push(...temp);
-    }
-    var tableData = function () {
-        var table = $('#allData').DataTable({
-            'fnCreatedRow': function (nRow, aData, iDataIndex) {
-                $(nRow).attr('id', 'my' + iDataIndex);
-            },
-            data: dataSet,
-            columns: [
-                { title: "questionId" },
-                { title: "text" },
-                { title: "createdDateTime" }
-            ]
+            $('#rowsel').click(function () {
 
-        });
-
-        $('#allData tbody').on('click', 'tr', function () {
-            $(this).toggleClass('active');
-        });
-
-        $('#rowsel').click(function () {
-            var dqArray = [];
-            var idselected = table.rows('.active').data();
-            for (var i = 0; i < idselected.length; i++) {
-                var temp = idselected[i];
-                dqArray.push(temp[0]);
-            }
-
-            //rIds Data Population
-            deleteQuestions(dqArray);
-        });
-    };
-};
-
-
-
-var fetchQuestion = function () {
-    $.get(URL + "dq", function (data, status) {
-        createDataSet(data);
+                var idselected = table.rows('.active').data();
+                for (var i = 0; i < idselected.length; i++) {
+                    var temp = idselected[i];
+                    //console.log(temp);
+                    dqArray.push(temp.questionId);
+                }
+                //rIds Data Population
+              //  deleteClick();
+            });
+        }
     });
+});
 
+
+var deleteClick = function () {
+    deleteQuestions(dqArray);
 };
 
 var deleteQuestions = function (quesDel) {
-    $.post(URL + "dq/" + quesDel);
+    //quesDel=quesDel.serialize();
+    if(quesDel!=""){
+        quesDel = {questionIds:quesDel}
+        quesDel = JSON.stringify(quesDel);
+       var fd = new FormData();
+        console.log(quesDel);
+    fd.append('questionIds',quesDel);
+    console.log(fd);
+    $.ajax({
+  url: 'http://localhost:8080/admin/dq',
+  data: fd,
+  processData: false,
+  contentType: false,
+  type: 'POST',
+  success: function(data){
     location.reload();
+  }
+}); 
+    }
+    
+   
 };
 
 var redirectToChar = function () {

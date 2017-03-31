@@ -1,20 +1,18 @@
 //ACTUAL CODE
 //ACTUAL CODE
-var trainValue;
+var dcArray = [];
 var URL = "http://localhost:8080/admin/";
 $(document).ready(function () {
-    sessionStorage["charTrain"]=null;
+    
     $.ajax({
-        url: URL + 'data',
+        url: URL + 'retrain/' + sessionStorage["charTrain"], 
         success: function (response) {
             var table = $('#allData').DataTable({
-                data: response,
+                data: response.questionList,
                 columns: [
-                    { "data": "charId" },
-                    { "data": "name" },
-                    { "data": "createdDateTime" },
-                    { "data": "noOfTimesPlayed" },
-                    { "data": "lastPlayedDateTime" }
+                    { "questionId": "questionId" },
+                    { "questionId": "text" },
+                    { "createdDateTime": "createdDateTime" }
                 ],
             });
             $('#allData tbody').on('click', 'tr', function () {
@@ -25,24 +23,20 @@ $(document).ready(function () {
 
                 var idselected = table.rows('.active').data();
                 var temp = idselected[0];
-                trainValue = temp.charId;
-               // console.log(trainValue);
-                sessionStorage["charTrain"]=trainValue;
+                var trainChar = temp.charId;
                 //rIds Data Population
-            //   callTrain();
+                //reTrain(trainChar);
             });
         }
     });
 });
 
-var callTrain = function(){
-    reTrain();
-}
 
 
-var reTrain = function () {
-    if(sessionStorage["charTrain"]!==null||sessionStorage["charTrain"]!==undefined)
-   location.href = "/adminchartrain.html";
+var reTrain = function (train) {
+   // $.get(URL + "retrain/" + train);
+    if(train!=null)
+    sessionStorage["charTrain"] = train;
     //  location.reload();
 };
 

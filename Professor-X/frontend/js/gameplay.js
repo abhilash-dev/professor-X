@@ -20,6 +20,7 @@ window.onload = function () {
 
 var initSession = function () {
 	$.get("http://localhost:8080/game/init");
+    
 }
 
 var fetchQuestion = function () {
@@ -33,7 +34,7 @@ var fetchQuestion = function () {
 			$("#qno").html(quesNo);
 			$("#questionplaceholder").html(ques);
 		});
-	}, 5000);
+	}, 500);
 };
 
 var submitanswer = function () {

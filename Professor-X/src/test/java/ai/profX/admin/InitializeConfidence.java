@@ -25,7 +25,7 @@ public class InitializeConfidence {
 	
 	@Test
 	public void readFileAndAddCharacters(){
-		String fileName = "confidence.txt";
+		String fileName = "confidence3.txt";
 
 		try (Stream<String> stream = Files.lines(Paths.get(fileName))) {
 			Iterator<String> lineIterator = stream.iterator();

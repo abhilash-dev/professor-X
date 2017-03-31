@@ -23,18 +23,7 @@ public class ProfessorXApplication {
 		SpringApplication.run(ProfessorXApplication.class, args);
 	}
 
-	/*@Bean
-	public CacheManager cacheManager() {
-		SimpleCacheManager cacheManager = new SimpleCacheManager();
-		cacheManager.setCaches(
-				Arrays.asList(new ConcurrentMapCache("characterCache"), new ConcurrentMapCache("confidenceCache"),
-						new ConcurrentMapCache("gameCache"), new ConcurrentMapCache("questionCache")));
 
-		return cacheManager;
-		
-		
-	}*/
-	
 	@Bean
 	public CacheManager cacheManager() {
 		return new EhCacheCacheManager(ehCacheCacheManager().getObject());
