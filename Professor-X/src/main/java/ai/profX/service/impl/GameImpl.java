@@ -48,7 +48,7 @@ public class GameImpl implements Game {
 	public List<Question> getInitialQuestions(List<Question> initialQuestions) {
 		initialQuestions.add(questionService.getQuestionById(6));
 
-		/*Random random = new Random(System.nanoTime());
+		Random random = new Random(System.nanoTime());
 		long potentialQuestionId;
 		Question question = null;
 		int count = 0;
@@ -61,13 +61,13 @@ public class GameImpl implements Game {
 					count++;
 				}
 			}
-		}*/
+		}
 
-		// Temp questions, necessary to track the diff b/w 2 systems
+		/*// Temp questions, necessary to track the diff b/w 2 systems
 		//begin
 		initialQuestions.add(questionService.getQuestionById(9));
 		initialQuestions.add(questionService.getQuestionById(3));
-		//end
+		//end*/
 		initialQuestions.add(questionService.getQuestionById(1));
 
 		return initialQuestions;
