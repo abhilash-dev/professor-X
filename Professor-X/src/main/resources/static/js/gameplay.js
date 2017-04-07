@@ -7,8 +7,9 @@ var imagelink;
 
 window.onload = function() {
 	initSession();
-
-	fetchQuestion();
+    setTimeout(function() {
+	    fetchQuestion();
+    }, 500);
 };
 
 var initSession = function() {
@@ -16,7 +17,6 @@ var initSession = function() {
 }
 
 var fetchQuestion = function() {
-	setTimeout(function() {
 		$.get(URL+"question", function(data, status) {
 			data = JSON.parse(data);
 			ques = data.question.text;
@@ -25,25 +25,18 @@ var fetchQuestion = function() {
 			$("#qno").html(quesNo);
 			$("#questionplaceholder").html(ques);
 		});
-	}, 500);
 };
 
 var submitanswer = function() {
 
 	var selection = $('input[name="answerchoice"]:checked').val();
-	$.post(URL + "answer/" + quesId + "/" + selection);
-	if (quesNo <= 20){
-		fetchQuestion();
-	    if (randomIntFromInterval(1, 10) < 5) {
-		    //$('#characterimage').attr("src", "../static/img/planb.png");
-		    $('#characterimage').attr("th:src", "@{/img/planb.png}");
-	    }else{
-		    //$('#characterimage').attr("src", "../static/img/bulb.png");
-		    $('#characterimage').attr("th:src", "@{/img/bulb.png}");
-	    }
-	}else{
-		guess();
-	}
+	$.when($.post(URL + "answer/" + quesId + "/" + selection)).then(function(){
+	    if (quesNo < 20){
+            fetchQuestion();
+        }else{
+        	guess();
+        }
+	});
 };
 
 var guess = function() {
@@ -51,18 +44,8 @@ var guess = function() {
 		$('.questionpanel').hide();
 		$('.afterguess').show();
 		$("#charguess").html(data);
-		setTimeout(function() {
-			$("#charguess").html(data);
-		}, 500);
-		var guessImage = googleCse(data);
-		console.log(guessImage);
-		$('#ourguess').attr("src", guessImage);
+		googleCse(data);
 	});
-
-};
-
-var randomIntFromInterval = function(min, max) {
-	return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
 var googleCse = function(character) {
@@ -72,15 +55,17 @@ var googleCse = function(character) {
 			+ q
 			+ "&cx=007472085462375901923%3Aa7ahjxglkne&fileType=png%2Cjpg&num=1&searchType=image&key="
 			+ key;
+	var imagelink = "";
 	$.get(urlKey, function(data) {
-		imagelink = data.items[image].thumbnailLink;
-		console.log(imagelink);
+		imagelink = data.items[0].link;
+		console.log(character+" Image Link = "+imagelink);
+		var image = "src=@{"+imagelink+"}";
+        $('#ourguess').attr("th:attr", image);
+        window.open(imagelink,'_blank');
 	});
-	return imagelink;
-};
+
+}
 
 var restart = function(){
-	$.get(URL + "restart");
-	initSession();
-	fetchQuestion();
+    window.location.reload(true);
 };
