@@ -112,12 +112,12 @@ public class WebController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/guess")
-	public @ResponseBody String getGuess(HttpServletRequest request){
+	public @ResponseBody Character getGuess(HttpServletRequest request){
 		HttpSession session = request.getSession();
 		LinkedHashMap<Long, Integer> characterValues = (LinkedHashMap<Long, Integer>) session.getAttribute("characterValues");
 		
 		Character character = game.guess(characterValues);
-		return character.getName();
+		return character;
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/guess")
