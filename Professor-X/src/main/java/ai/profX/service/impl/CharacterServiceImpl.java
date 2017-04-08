@@ -107,7 +107,7 @@ public class CharacterServiceImpl implements CharacterService {
 		while (it.hasNext()) {
 			Character character = it.next();
 			confidence = confidenceRepo.findByCharacterIdAndQuestionId(character.getCharId(), questionId);
-			if (confidence.getValue() > 0) {
+			if (confidence!=null && confidence.getValue() > 0) {
 				count++;
 			}
 		}
@@ -123,7 +123,7 @@ public class CharacterServiceImpl implements CharacterService {
 		while (it.hasNext()) {
 			Character character = it.next();
 			confidence = confidenceRepo.findByCharacterIdAndQuestionId(character.getCharId(), questionId);
-			if (confidence.getValue() < 0) {
+			if (confidence!=null && confidence.getValue() < 0) {
 				count++;
 			}
 		}

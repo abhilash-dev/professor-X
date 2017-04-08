@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import ai.profX.service.CharacterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,6 +42,9 @@ public class WebController {
 	
 	@Autowired
 	private ConfidenceService confidenceService;
+
+	@Autowired
+	private CharacterService characterService;
 	
 	Gson gson = new Gson();
 	Boolean finalAnswer = false;
@@ -152,7 +156,7 @@ public class WebController {
 			@RequestParam(value = "newCharacter", required = true)Boolean newCharacter,
 			@RequestParam(value = "characterName", required = true)String characterName,
 			@RequestParam(value = "userQuestionText", required = false)String userQuestionText,
-			@RequestParam(value = "userQuestionAnswer", required = false)int userQuestionAnswer){
+			@RequestParam(value = "userQuestionAnswer", required = false)Integer userQuestionAnswer){
 		HttpSession session = request.getSession();
 		HashMap<Long, Integer> askedQuestions = (HashMap<Long, Integer>) session.getAttribute("askedQuestions");
 		int answer = Constants.I_DONT_KNOW;
@@ -167,14 +171,30 @@ public class WebController {
 			}
 		}
 		
-		if(!userQuestionText.trim().isEmpty() && questionService.getQuestionByText(userQuestionText.trim()) == null){
-			newQuestionId = questionService.addQuestion(userQuestionText.trim());
-		}else{
-			question = questionService.getQuestionByText(userQuestionText.trim());
-			newQuestionId = question.getQuestionId();
+		if(!userQuestionText.trim().isEmpty()){
+			if(questionService.getQuestionByText(userQuestionText.trim()) == null) {
+				newQuestionId = questionService.addQuestion(userQuestionText.trim());
+			}else {
+				question = questionService.getQuestionByText(userQuestionText.trim());
+				newQuestionId = question.getQuestionId();
+			}
 		}
-		
+
 		if(!characterName.trim().isEmpty()){
+			long characterId = 0;
+			try {
+				characterId = Long.parseLong(characterName.trim());
+			}catch (Exception e){
+				e.printStackTrace();
+			}
+
+			if(characterId > 0){
+				Character character;
+				character = characterService.getCharacterById(characterId);
+				if(character!=null){
+					characterName = character.getName();
+				}
+			}
 			newCharacterId = game.learnCharacter(askedQuestions, characterName.trim(),finalAnswer);
 		}
 		

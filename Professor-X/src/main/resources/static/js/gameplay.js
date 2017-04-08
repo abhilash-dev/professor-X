@@ -106,7 +106,8 @@ var viewThanks = function () {
 	$('.thanks').show();
 	$('.wrongAnswer').hide();
 	$.post(URL + "guess",{
-	    "characterId":characterID
+	    "characterId":characterID,
+	    "finalAnswer":true
 	});
 };
 
