@@ -9,6 +9,7 @@ import java.util.Random;
 
 import ai.profX.util.GameLogWriter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -269,7 +270,7 @@ public class GameImpl implements Game {
 			}
 			askedQuestions.put(questionId, answer);
 		}
-		GameLogWriter.writeToFile(characterValues,askedQuestions,questionId,answer);
+		//GameLogWriter.writeToFile(characterValues,askedQuestions,questionId,answer);
 	}
 
 	@Override
@@ -315,7 +316,22 @@ public class GameImpl implements Game {
 		
 		characterService.updateNoOfTimesPlayed(charId);
 		gameLogService.addGameLog(charId, askedQuestions, finalAnswer);
-
+		clearAllCache();
 	}
 
+
+	private void clearAllCache(){
+		clearCharacterCache();
+		clearConfidenceCache();
+		clearQuestionCache();
+	}
+
+	@CacheEvict(value = "characterCache", allEntries = true)
+	private void clearCharacterCache(){}
+
+	@CacheEvict(value = "confidenceCache", allEntries = true)
+	private void clearConfidenceCache(){}
+
+	@CacheEvict(value = "questionCache", allEntries = true)
+	private void clearQuestionCache(){}
 }

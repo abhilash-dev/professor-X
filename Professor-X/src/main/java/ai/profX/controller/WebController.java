@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import ai.profX.service.CharacterService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -133,6 +134,7 @@ public class WebController {
 		//TODO the redirection in both if and else must be handled by front-end
 		if(finalAnswer){
 			game.learn(askedQuestions, characterId,finalAnswer);
+			clearAllCache();
 			resetGame(request);
 			//TODO redirect to index page to be handled by front-end
 		}else{
@@ -185,7 +187,8 @@ public class WebController {
 			try {
 				characterId = Long.parseLong(characterName.trim());
 			}catch (Exception e){
-				e.printStackTrace();
+				//e.printStackTrace();
+				System.out.println("This is a character that was absent in the list: "+characterName.trim());
 			}
 
 			if(characterId > 0){
@@ -201,7 +204,8 @@ public class WebController {
 		if(newQuestionId!=Constants.NON_EXISTENT_VALUE && newCharacterId!=Constants.NON_EXISTENT_VALUE){
 			confidenceService.updateConfidence(newCharacterId, newQuestionId, answer);
 		}
-		
+
+		clearAllCache();
 		resetGame(request);
 		//TODO redirect to index to be handled by front-end
 	}
@@ -224,4 +228,19 @@ public class WebController {
 		LinkedHashMap<Long, Integer> responseMap = game.getNearbyCharacterValues(characterValues, 10); 
 		return gson.toJson(responseMap);
 	}
+
+	private void clearAllCache(){
+		clearCharacterCache();
+		clearConfidenceCache();
+		clearQuestionCache();
+	}
+
+	@CacheEvict(value = "characterCache", allEntries = true)
+	private void clearCharacterCache(){}
+
+	@CacheEvict(value = "confidenceCache", allEntries = true)
+	private void clearConfidenceCache(){}
+
+	@CacheEvict(value = "questionCache", allEntries = true)
+	private void clearQuestionCache(){}
 }

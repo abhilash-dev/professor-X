@@ -10,6 +10,7 @@ import ai.profX.model.Question;
 public interface QuestionRepo extends MongoRepository<Question, Long> {
 	@Cacheable(value="questionCache")
 	public Question findByQuestionId(long questionId);
+	@Cacheable(value = "questionCache")
 	public Question findByText(String text);
 	@Cacheable("questionCache")
 	public List<Question> findAll();

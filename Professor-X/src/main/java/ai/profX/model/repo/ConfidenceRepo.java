@@ -9,5 +9,6 @@ import ai.profX.model.Confidence;
 public interface ConfidenceRepo extends MongoRepository<Confidence, ObjectId> {
 	@Cacheable(value="confidenceCache")
 	public Confidence findByCharacterIdAndQuestionId(long charId, long questionId);
+	@Cacheable(value = "confidenceCache")
 	public Confidence findByCharacterIdAndQuestionIdAndValue(long charId, long questionId, int value);
 }

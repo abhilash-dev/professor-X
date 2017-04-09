@@ -19,11 +19,16 @@ public class TestCharacterService {
 	
 	@Test
 	public void test(){
-		System.out.println(characterService.getTotalCharacterCount());
+		String text = "Virat Kohli";
+		Character character;
+		if(text.trim()!="") {
+			character = characterService.getCharacterByName(text.trim().toLowerCase());
+			if (character != null) {
+				long characterId = character.getCharId();
+			}else{
+				System.out.println();
+			}
+		}
 
-		characterService.addNewCharacter("dummy");
-		Character character = characterService.getCharacterByName("dummy");
-		if(character!=null)
-			System.out.println(character.getCharId());
 	}
 }
